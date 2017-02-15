@@ -1,1 +1,1 @@
-alert('feels good man');
+var a = 1;
