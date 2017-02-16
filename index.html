@@ -1,10 +1,30 @@
 <html>
     <head>
         <title>Addressbook API interface</title>
-        <style src="addressbook.css"></style>
+        <link href="addressbook.css" rel="stylesheet" type="text/css"/>
         <script src="addressbook.js"></script>
     </head>
     <body>
-        <input type="text"></input>
+        <div class="addressbookapi">
+            <div class="menu">
+                <ul>
+                    <li><a>S&oslash;k</a></li>
+                    <li><a>Sett inn</a></li>
+                    <li><a>Oppdater</a></li>
+                    <li><a>Slett</a></li>
+                </ul>
+            </div>
+            <form class="inputform">
+
+                <h1>Addressbook API Web-Interface</h1>
+                <label>Fyll inn informasjon i felta under</label>
+
+                <p>ID<input      type="text" id="id_input"/></p>
+                <p>Namn<input    type="text" id="name_input"/></p>
+                <p>Telefon<input type="text" id="tlf_input"/></p>
+
+                <button id="submitbutton" onclick="submitForm();">Go!</button>
+            </form>
+        </div>
     </body>
 </html>
