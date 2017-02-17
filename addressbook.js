@@ -57,4 +57,4 @@ function initializeState() {
     setState('get_pane');
 }
 
-window.addEventListener('load', initializeState, false);
+window.addEventListener('load', initializeState, true);
