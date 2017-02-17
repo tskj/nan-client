@@ -51,6 +51,7 @@ function sendRequest() {
             if (req.status === 200) {
                 alert(req.responseText);
             }
+        }
     };
     req.send();
 }
