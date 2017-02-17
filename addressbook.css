@@ -30,9 +30,11 @@ body {
     background-color: #fafafa !important;
 }
 
+/*
 .menu li:active {
     background-color: #eaeaea !important;
 }
+*/
 
 .menu div {
     display: block;

@@ -28,6 +28,14 @@ function setState(state) {
 
         $(element).style.backgroundColor = normalColor;
     });
+
+    if (state === 'get_pane' || state === 'delete_pane') {
+        $('name_input').disabled = true;
+        $('tlf_input').disabled = true;
+    } else {
+        $('name_input').disabled = false;
+        $('tlf_input').disabled = false;
+    }
 }
 
 function initializeState() {
