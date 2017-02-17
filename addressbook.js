@@ -1,4 +1,4 @@
-var curState;
+var currState;
 
 const panes = [   'get_pane'
               ,   'post_pane'
@@ -36,12 +36,23 @@ function setState(state) {
         $('name_input').disabled = false;
         $('tlf_input').disabled = false;
     }
+
+    $(state).insertBefore($('bar'), $(state).firstChild);
 }
 
 function initializeState() {
     panes.forEach( pane => {
         $(pane).addEventListener('click', _ => setState(pane), false);
     });
+
+    var pane_selector = document.createElement('div');
+    pane_selector.id = 'bar';
+    pane_selector.style.backgroundColor = '#3088ff';
+    pane_selector.style.position = 'absolute';
+    pane_selector.style.width = '250px'
+    pane_selector.style.paddingTop = '0px';
+    pane_selector.style.paddingBottom = '5px';
+    document.body.appendChild(pane_selector);
 
     setState('get_pane');
 }

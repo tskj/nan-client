@@ -20,6 +20,7 @@ body {
 }
 
 .menu li {
+    position: relative;
     float: left;
     width: 250px;
     height: 40px;
