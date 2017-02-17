@@ -2,7 +2,7 @@ body {
     background-color: #f0f0f0;
     font-family: sans-serif;
     margin: 0 auto;
-    width: 1000px;
+    width: 52%;
 }
 
 .dropshadow {
@@ -22,7 +22,7 @@ body {
 .menu li {
     position: relative;
     float: left;
-    width: 250px;
+    width: 25%;
     height: 40px;
     cursor: pointer;
 }
@@ -42,8 +42,8 @@ body {
     text-align: center;
     color: #444444;
     font-weight: bold;
-    font-size: 15;
-    padding: 13;
+    font-size: 15px;
+    padding: 13px;
 }
 
 .menu div:active {
@@ -69,7 +69,7 @@ body {
 
 .inputform div {
     margin: 10 auto;
-    width: 620px;
+    width: 62%;
     height: 80px;
 }
 
@@ -79,12 +79,12 @@ body {
     font-size: 20px;
     color: #444444;
     margin: 30 auto;
-    width: 600px;
+    width: 60%;
 }
 
 .inputfield input {
     height: 25px;
-    width: 350px;
+    width: 58%;
     float: right;
 }
 
@@ -93,7 +93,7 @@ body {
     line-height: 40px;
     text-align: center;
     margin: 130 auto;
-    width: 550px;
+    width: 55%;
     height: 40px;
     cursor: pointer;
     border-radius: 10px;
