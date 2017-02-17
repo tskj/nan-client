@@ -46,6 +46,11 @@ function sendRequest() {
     var req = new XMLHttpRequest();
     req.open('GET', apiResourcePath, true);
     req.setRequestHeader('Content-Type', 'application/xml');
+	req.onreadystatechange = function() {
+		if (req.readyState === XMLHttpRequest.DONE && req.status === 200) {
+			alert('yaaay');
+		}
+	};
     req.send();
 }
 
