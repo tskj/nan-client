@@ -4,7 +4,9 @@ const panes = [   'get_pane'
               ,   'post_pane'
               ,   'put_pane'
               ,   'delete_pane'
-              ]
+              ]   ;
+
+const apiResourcePath = '/api/addressbook';
 
 function $(id) {
     return document.getElementById(id);
@@ -40,6 +42,13 @@ function setState(state) {
     $(state).insertBefore($('bar'), $(state).firstChild);
 }
 
+function sendRequest() {
+    var req = new XMLHttpRequest();
+    req.open('GET', apiResourcePath, true);
+    req.setRequestHeader('Content-Type', 'application/xml');
+    req.send();
+}
+
 function initializeState() {
     panes.forEach( pane => {
         $(pane).addEventListener('click', _ => setState(pane), false);
@@ -57,4 +66,7 @@ function initializeState() {
     setState('get_pane');
 }
 
-window.addEventListener('load', initializeState, true);
+window.addEventListener('load', initializeState, false);
+window.addEventListener('load', _ => {
+    $('submit_button').addEventListener('click', sendRequest, false);
+}, false);
