@@ -5,25 +5,27 @@
         <script src="addressbook.js"></script>
     </head>
     <body>
-        <div class="menu">
-            <ul>
-                <li><div>S&oslash;k</div></li>
-                <li><div>Sett inn</div></li>
-                <li><div>Oppdater</div></li>
-                <li><div>Slett</div></li>
-            </ul>
+        <div class="dropshadow">
+            <div class="menu">
+                <ul>
+                    <li><div>S&oslash;k</div></li>
+                    <li><div>Sett inn</div></li>
+                    <li><div>Oppdater</div></li>
+                    <li><div>Slett</div></li>
+                </ul>
+            </div>
+            <form class="inputform">
+
+                <h1>Addressbook API Web-Interface</h1>
+                <div><b>Fyll inn informasjon i felta under<b></div>
+
+                <p class="inputfield">ID<input      type="text" id="id_input"/></p>
+                <p class="inputfield">Namn<input    type="text" id="name_input"/></p>
+                <p class="inputfield">Telefon<input type="text" id="tlf_input"/></p>
+
+                <div id="submitbutton">Go!</div>
+
+            </form>
         </div>
-        <form class="inputform">
-
-            <h1>Addressbook API Web-Interface</h1>
-            <div><b>Fyll inn informasjon i felta under<b></div>
-
-            <p class="inputfield">ID<input      type="text" id="id_input"/></p>
-            <p class="inputfield">Namn<input    type="text" id="name_input"/></p>
-            <p class="inputfield">Telefon<input type="text" id="tlf_input"/></p>
-
-            <button id="submitbutton">Go!</button>
-
-        </form>
     </body>
 </html>

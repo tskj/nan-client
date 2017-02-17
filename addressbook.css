@@ -5,6 +5,10 @@ body {
     width: 1000px;
 }
 
+.dropshadow {
+    box-shadow: 0px 0px 80px 1px #cccccc;
+}
+
 .menu ul {
     list-style-type: none;
     background-color: #f5f5f5;
@@ -12,6 +16,7 @@ body {
     padding: 0;
     height: 40px;
     overflow: hidden;
+    user-select: none;
 }
 
 .menu li {
@@ -22,7 +27,11 @@ body {
 }
 
 .menu li:hover {
-    background-color: #e5e5e5;
+    background-color: #fafafa;
+}
+
+.menu li:active {
+    background-color: #eaeaea;
 }
 
 .menu div {
@@ -34,34 +43,71 @@ body {
     padding: 13;
 }
 
+.menu div:active {
+    color: #fafafa;
+}
+
 .inputform {
-    font-family: "Verdana", "Segoe UI", "Lucida Sans";
+    padding: 0.05;
+    font-family: Verdana;
     background-color: #fafafa;
     color: #555555;
 }
 
 .inputform h1 {
-    font-family: "Segoe UI", "Lucida Sans";
-    color: #444444;
+    font-family: "Trebuchet MS", arial;
+    font-weight: normal;
+    font-size: 35px;
+    color: #555555;
     text-align: center;
     margin: 0 auto;
-    padding: 70px;
+    padding: 80px;
 }
 
 .inputform div {
     margin: 10 auto;
     width: 620px;
-    height: 60px;
+    height: 80px;
 }
 
 .inputfield {
+    font-family: "Trebuchet MS", arial;
+    font-weight: normal;
+    font-size: 20px;
+    color: #444444;
     margin: 30 auto;
     width: 600px;
-    font-size: 20px;
 }
 
 .inputfield input {
     height: 25px;
     width: 350px;
     float: right;
+}
+
+.inputform #submitbutton {
+    box-shadow: 0px 5px 20px 1px #cccccc;
+    line-height: 40px;
+    text-align: center;
+    margin: 130 auto;
+    width: 550px;
+    height: 40px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-family: "Trebuchet MS";
+    font-size: 27px;
+    font-weight: lighter;
+    background-color: #4bcf5a;
+    color: white;
+    user-select: none;
+}
+
+.inputform #submitbutton:hover {
+    background-color: #46bf53;
+}
+
+.inputform #submitbutton:active {
+    box-shadow: 0px 0px 20px 1px #cccccc;
+    background-color: #40b050;
+    color: #cafada;
 }
