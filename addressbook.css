@@ -27,11 +27,11 @@ body {
 }
 
 .menu li:hover {
-    background-color: #fafafa;
+    background-color: #fafafa !important;
 }
 
 .menu li:active {
-    background-color: #eaeaea;
+    background-color: #eaeaea !important;
 }
 
 .menu div {
