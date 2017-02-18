@@ -3,7 +3,8 @@
 WEBUSER=www
 APIROOT=/www/addressbook
 
-sudo rm -r $APIROOT/* 2> /dev/null
+sudo rm -r $APIROOT 2> /dev/null
+sudo mkdir $APIROOT
 
 sudo cp *.html $APIROOT 2> /dev/null
 sudo cp *.css $APIROOT 2> /dev/null
