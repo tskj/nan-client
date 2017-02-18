@@ -86,6 +86,15 @@ body {
     border-bottom-color: #3088ff;
 }
 
+#ID_selector.inactive {
+    border-bottom-color: #e0e0e0;
+    color: #cccccc;
+}
+
+#ID_selector.inactive:hover {
+    border-bottom-width: 2;
+}
+
 .inputfield {
     font-family: "Trebuchet MS", arial;
     font-weight: normal;
@@ -102,6 +111,7 @@ body {
 }
 
 #new_fields_button {
+    box-shadow: 0px 1px 2px 1px #dddddd;
     margin: 0;
     margin-right: 10px;
     float: right;
@@ -112,7 +122,7 @@ body {
     text-align: center;
     padding-right: 3px;
     line-height: 30px;
-    background-color: #eeeeee;
+    background-color: #f0f0f0;
     border-style: solid;
     border-radius: 5px;
     border-width: 1px;
@@ -126,12 +136,33 @@ body {
 }
 
 #new_fields_button:active {
+    box-shadow: none;
     background-color: #cccccc;
     border-color: #dfdfdf;
 }
 
-.new_fields_button_inactive {
-    background-color: black;
+#new_fields_button.inactive {
+    background-color: #eeeeee;
+    border-color: #cccccc;
+    box-shadow: none;
+    color: #cccccc;
+    cursor: default;
+}
+
+#new_fields_button.inactive:hover {
+    background-color: #eeeeee;
+    border-color: #cccccc;
+    box-shadow: none;
+    color: #cccccc;
+    cursor: default;
+}
+
+#new_fields_button.inactive:active {
+    background-color: #eeeeee;
+    border-color: #cccccc;
+    box-shadow: none;
+    color: #cccccc;
+    cursor: default;
 }
 
 .inputform #submit_button {

@@ -45,14 +45,51 @@ function setState(state) {
 }
 
 function setSearchState() {
-    $('new_fields_button').className = 'new_fields_button_inactive';
+    $('new_fields_button').className = 'inactive';
+    $('ID_selector').className = 'active';
+    $('ID_selector').disabled = false;
+
+    inputFields.forEach( form => {
+        enableForm(form, false);
+    });
 }
 
 function setPostState() {
-    $('new_fields_button').className = 'new_fields_button_active';
+    $('new_fields_button').className = 'active';
+    $('ID_selector').className = 'inactive';
+    $('ID_selector').disabled = true;
+
+    inputFields.forEach( form => {
+        enableForm(form, true);
+    });
 }
 
-function addFormFields() {
+function setPutState() {
+    $('new_fields_button').classList = 'inactive';
+    $('ID_selector').className = 'active';
+    $('ID_selector').disabled = false;
+
+    var firstForm = inputFields[0];
+    enableForm(firstForm, true);
+
+    inputFields.forEach( form => {
+        if (form !== firstForm) {
+            enableForm(form, false);
+        }
+    });
+}
+
+function enableForm(form, enabled) {
+    form.forEach( field => {
+        field.children[0].disabled = !enabled;
+    });
+}
+
+function addFormFields(event) {
+
+    if (event.target.className === 'inactive') {
+        return;
+    }
 
     var newForm = [];
     inputFields[0].forEach( n => {
