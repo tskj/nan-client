@@ -8,7 +8,7 @@ const panes = [   'get_pane'
               ,   'delete_pane'
               ]   ;
 
-const apiResourcePath = 'http://localhost:8080/api/addressbook/';
+const apiResourcePath = '/api/addressbook/';
 
 function $(id) {
     return document.getElementById(id);
@@ -174,7 +174,9 @@ function handleResposne(req, reqVerb) {
         if (req.readyState === XMLHttpRequest.DONE) {
             if (req.status === 200) {
                 var xml = (new DOMParser()).parseFromString(req.responseText.slice(bodyStartIndex(req.responseText)), 'application/xml');
+                /*
                 alert((new XMLSerializer()).serializeToString(xml));
+                */
             }
         }
     };
