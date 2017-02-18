@@ -93,7 +93,7 @@ body {
     text-align: center;
     margin-top: 160;
     margin-bottom: 70;
-    width: 60%;
+    width: 63%;
     height: 50px;
     line-height: 50px;
     cursor: pointer;
@@ -119,11 +119,16 @@ body {
 .inputform #submit_button:active {
     box-shadow: 0px 0px 20px 1px #cccccc;
     background-color: #40b050;
-    color: #aaaaaa;
+    color: #255525;
     line-height: 49px;
     border-style: solid;
     border-width: 0px 1px 2px 0px;
     border-color: #4bcf5a;
+}
+
+#results {
+    background-color: #fafafa;
+    margin-top: 50;
 }
 
 
