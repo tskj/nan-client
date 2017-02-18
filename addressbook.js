@@ -8,7 +8,7 @@ const panes = [   'get_pane'
               ,   'delete_pane'
               ]   ;
 
-const apiResourcePath = '/api/addressbook';
+const apiResourcePath = 'http://localhost:8080/api/addressbook/';
 
 function $(id) {
     return document.getElementById(id);
@@ -19,6 +19,8 @@ function setState(state) {
     if (panes.indexOf(state) < 0) {
         return;
     }
+    
+    currState = state;
 
     const selectedColor = getComputedStyle(document.querySelector('.inputform')).backgroundColor;
     const normalColor = getComputedStyle(document.querySelector('.menu ul')).backgroundColor;
@@ -118,10 +120,17 @@ function addFormFields(event) {
 function sendRequest() {
 
     var chosenID = $('velg_id').children[0].value;
+    if ($('velg_id').children[0].disabled) {
+        chosenID = '';
+    }
 
     var xml = document.implementation.createDocument(null, 'contacts');
 
     inputFields.forEach( inputForm => {
+
+        if (inputForm[0].children[0].disabled) {
+            return;
+        }
 
         var contactNode = xml.createElement('contact');
 
@@ -140,22 +149,48 @@ function sendRequest() {
         xml.getElementsByTagName('contacts')[0].appendChild(contactNode);
     });
 
-    // Debug only
-    alert((new XMLSerializer()).serializeToString(xml));
+    var reqVerb = '';
 
-    /*
+    switch (currState) {
+        case 'get_pane':    reqVerb = 'GET';
+                            break;
+        case 'post_pane':   reqVerb = 'POST';
+                            break;
+        case 'put_pane':    reqVerb = 'PUT';
+                            break;
+        case 'delete_pane': reqVerb = 'DELETE';
+        default:            return;
+    }
+
     var req = new XMLHttpRequest();
-    req.open('GET', apiResourcePath, true);
+    req.open(reqVerb, apiResourcePath + chosenID, true);
     req.setRequestHeader('Content-Type', 'application/xml');
-	req.onreadystatechange = function() {
+    req.onreadystatechange = handleResposne(req, reqVerb);
+    req.send(xml);
+}
+
+function handleResposne(req, reqVerb) {
+    return _ => {
         if (req.readyState === XMLHttpRequest.DONE) {
             if (req.status === 200) {
-                alert(req.responseText);
+                var xml = (new DOMParser()).parseFromString(req.responseText.slice(bodyStartIndex(req.responseText)), 'application/xml');
+                alert((new XMLSerializer()).serializeToString(xml));
             }
         }
     };
-    req.send();
-    */
+}
+
+function bodyStartIndex(str) {
+    var conseq_lfs = 0;
+    for (var i = 0; i < str.length; i++) {
+        if (str[i] == '\n') conseq_lfs++;
+        if (conseq_lfs >= 2) return i+1;
+
+        if (' \t\n\r'.indexOf(str[i]) > -1) continue;
+
+        conseq_lfs = 0;
+    }
+    return i;
 }
 
 function initializeState() {
