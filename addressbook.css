@@ -235,6 +235,7 @@ body {
 #results .th {
     list-style-type: none;
     background-color: #f0f0f0;
+    font-weight: bold;
     margin: 0 auto;
     padding: 0;
     height: 50px;
@@ -257,13 +258,20 @@ body {
 }
 
 #results > .tr_odd div {
+    color: #444444;
     font-weight: normal;
     background-color: #fafafa;
 }
 
 #results > .tr_even {
+    color: #444444;
     font-weight: normal;
     background-color: #f2f2f2;
+}
+
+#results div.greyed_out {
+    color: #aaaaaa;
+    font-weight: 100;
 }
 
 @media only screen and (max-device-width: 480px) {

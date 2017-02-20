@@ -173,8 +173,66 @@ function handleResposne(req, reqVerb) {
     return _ => {
         if (req.readyState === XMLHttpRequest.DONE) {
             if (req.status === 200 && reqVerb === 'GET') {
+
                 var xml = (new DOMParser()).parseFromString(req.responseText, 'application/xml');
-                alert(xml.documentElement.firstElementChild.firstElementChild.firstChild.textContent);
+
+                var results = document.createElement('div');
+                results.className = 'dropshadow';
+                results.id = 'results';
+
+                var listDiv = function(name, grey) {
+                    var div = document.createElement('div');
+                    div.innerHTML = name
+                    if (grey) {
+                        div.className = 'greyed_out';
+                    }
+                    var li = document.createElement('li');
+                    li.appendChild(div);
+                    return li;
+                }
+
+                var header = document.createElement('ul');
+                header.className = 'th';
+
+                header.appendChild(listDiv('ID'));
+                header.appendChild(listDiv('Namn'));
+                header.appendChild(listDiv('Telefon'));
+
+                results.appendChild(header);
+
+                var oddRow = true;
+
+                var ids = xml.getElementsByTagName('id');
+                var names = xml.getElementsByTagName('name');
+                var tlfs = xml.getElementsByTagName('tlf');
+
+                for (var i = 0; i < names.length; i++) {
+
+                    var contactList = document.createElement('ul');
+                    contactList.className = (oddRow) ? 'tr_odd' : 'tr_even';
+
+                    var id = ids[i].firstChild;
+                    var id_grey = (id) ? false : true;
+                    id = (id) ? id.textContent : '&lt;null&gt;';
+
+                    var name = names[i].firstChild;
+                    var name_grey = (name) ? false : true;
+                    name = (name) ? name.textContent : '&lt;null&gt;';
+
+                    var tlf = tlfs[i].firstChild;
+                    var tlf_grey = (tlf) ? false : true;
+                    tlf = (tlf) ? tlf.textContent : '&lt;null&gt;';
+
+                    contactList.appendChild(listDiv(id, id_grey));
+                    contactList.appendChild(listDiv(name, name_grey));
+                    contactList.appendChild(listDiv(tlf, tlf_grey));
+
+                    results.appendChild(contactList);
+
+                    oddRow = !oddRow;
+                }
+
+                $('app').appendChild(results);
             }
         }
     };
