@@ -195,7 +195,7 @@ body {
 .inputform #submit_button:hover {
     background-color: #46bf53;
     border-style: solid;
-    border-width: 3px 1px 2px 1px;
+    border-width: 3px 1px 3px 1px;
     border-bottom-color: #40c050;
     border-right-color: #40c050;
     border-left-color: #60e070;
