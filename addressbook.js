@@ -172,27 +172,12 @@ function sendRequest() {
 function handleResposne(req, reqVerb) {
     return _ => {
         if (req.readyState === XMLHttpRequest.DONE) {
-            if (req.status === 200) {
-                var xml = (new DOMParser()).parseFromString(req.responseText.slice(bodyStartIndex(req.responseText)), 'application/xml');
-                /*
-                alert((new XMLSerializer()).serializeToString(xml));
-                */
+            if (req.status === 200 && reqVerb === 'GET') {
+                var xml = (new DOMParser()).parseFromString(req.responseText, 'application/xml');
+                alert(xml.documentElement.firstElementChild.firstElementChild.firstChild.textContent);
             }
         }
     };
-}
-
-function bodyStartIndex(str) {
-    var conseq_lfs = 0;
-    for (var i = 0; i < str.length; i++) {
-        if (str[i] == '\n') conseq_lfs++;
-        if (conseq_lfs >= 2) return i+1;
-
-        if (' \t\n\r'.indexOf(str[i]) > -1) continue;
-
-        conseq_lfs = 0;
-    }
-    return i;
 }
 
 function initializeState() {
