@@ -232,6 +232,7 @@ function handleResposne(req, reqVerb) {
                     oddRow = !oddRow;
                 }
 
+                $('results').remove();
                 $('app').appendChild(results);
             }
         }
