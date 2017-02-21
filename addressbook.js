@@ -182,7 +182,7 @@ function handleResposne(req, reqVerb) {
 
                 var listDiv = function(name, grey) {
                     var div = document.createElement('div');
-                    div.innerHTML = name
+                    div.textContent = name
                     if (grey) {
                         div.className = 'greyed_out';
                     }
@@ -213,15 +213,15 @@ function handleResposne(req, reqVerb) {
 
                     var id = ids[i].firstChild;
                     var id_grey = (id) ? false : true;
-                    id = (id) ? id.textContent : '&lt;null&gt;';
+                    id = (id) ? id.textContent : '<null>';
 
                     var name = names[i].firstChild;
                     var name_grey = (name) ? false : true;
-                    name = (name) ? name.textContent : '&lt;null&gt;';
+                    name = (name) ? name.textContent : '<null>';
 
                     var tlf = tlfs[i].firstChild;
                     var tlf_grey = (tlf) ? false : true;
-                    tlf = (tlf) ? tlf.textContent : '&lt;null&gt;';
+                    tlf = (tlf) ? tlf.textContent : '<null>';
 
                     contactList.appendChild(listDiv(id, id_grey));
                     contactList.appendChild(listDiv(name, name_grey));
