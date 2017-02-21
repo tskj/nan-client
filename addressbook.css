@@ -286,14 +286,17 @@ body {
 }
 
 .WarningResponse > div {
-    color: #3a403a;
+    color: #f2ffef;
+    font-weight: thin;
     margin-top: 30px;
     margin-left: 50px;
     line-height: 140%;
+    text-shadow: 1px 1px 2px #a0caa0;
+    -webkit-font-smoothing: antialiased;
 }
 
 .WarningResponse b {
-    color: #1a201a;
+    color: #ffffff;
     margin-right: 5px;
 }
 

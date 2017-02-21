@@ -117,7 +117,7 @@ function addFormFields(event) {
     inputFields.push(newForm);
 }
 
-function sendRequest() { $('test').scrollIntoView();
+function sendRequest() {
 
     var chosenID = $('velg_id').children[0].value;
     if ($('velg_id').children[0].disabled) {
@@ -274,3 +274,9 @@ window.addEventListener('load', _ => {
 window.addEventListener('load', _ => {
     $('new_fields_button').addEventListener('click', addFormFields, false);
 });
+
+/** */
+window.addEventListener('scroll', _ => {
+    value = '';
+    $('scrollvalue').innerHTML = value;
+}, true);
