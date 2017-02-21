@@ -274,6 +274,29 @@ body {
     font-weight: 100;
 }
 
+.WarningResponse {
+    border-radius: 30px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #80d090;
+    background-color: #98e3a1;
+    margin-bottom: 150px;
+    margin-top: 50px;
+    height: 150px;
+}
+
+.WarningResponse > div {
+    color: #3a403a;
+    margin-top: 30px;
+    margin-left: 50px;
+    line-height: 140%;
+}
+
+.WarningResponse b {
+    color: #1a201a;
+    margin-right: 5px;
+}
+
 @media only screen and (max-device-width: 480px) {
     body {
         width: 100%;

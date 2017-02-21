@@ -117,7 +117,7 @@ function addFormFields(event) {
     inputFields.push(newForm);
 }
 
-function sendRequest() {
+function sendRequest() { $('test').scrollIntoView();
 
     var chosenID = $('velg_id').children[0].value;
     if ($('velg_id').children[0].disabled) {
