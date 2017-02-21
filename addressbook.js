@@ -278,5 +278,9 @@ window.addEventListener('load', _ => {
 /** */
 window.addEventListener('scroll', _ => {
     value = '';
+    value += 'Lenth scrolled: ' + window.pageYOffset + '<br>' // Height scrolled
+    value += window.innerHeight + '<br>'; // Height of "physical" screen
+    value += document.body.scrollHeight + '<br>'; // Height of entire document
+    value += $('status').getBoundingClientRect().top; // Distance from top of div to top of screen
     $('scrollvalue').innerHTML = value;
 }, true);
