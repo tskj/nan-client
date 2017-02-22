@@ -177,7 +177,6 @@ function handleResposne(req, reqVerb) {
                 var xml = (new DOMParser()).parseFromString(req.responseText, 'application/xml');
 
                 var results = document.createElement('div');
-                results.className = 'dropshadow';
                 results.id = 'results';
 
                 var listDiv = function(name, grey) {
@@ -192,7 +191,7 @@ function handleResposne(req, reqVerb) {
                 }
 
                 var header = document.createElement('ul');
-                header.className = 'th';
+                header.className = 'th' + ' ' + 'dropshadow';
 
                 header.appendChild(listDiv('ID'));
                 header.appendChild(listDiv('Namn'));
@@ -209,7 +208,8 @@ function handleResposne(req, reqVerb) {
                 for (var i = 0; i < names.length; i++) {
 
                     var contactList = document.createElement('ul');
-                    contactList.className = (oddRow) ? 'tr_odd' : 'tr_even';
+                    contactList.className = 'dropshadow '
+                    contactList.className += (oddRow) ? 'tr_odd' : 'tr_even';
 
                     var id = ids[i].firstChild;
                     var id_grey = (id) ? false : true;
