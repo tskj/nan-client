@@ -117,27 +117,30 @@ function addFormFields(event) {
     inputFields.push(newForm);
 }
 
-function expDecayScroll(d, s) {
+function expDecayAnimate(f, fp, cp, s) {
+
+    s = (typeof s !== 'undefined') ? s : 10;
+
+    const d = fp - cp;
 
     const fps = 100;
 
     const ms = Math.pow(10, 3);
     const e = 0.001;
-    if (Math.abs(d) < e) {
-        window.scrollTo(window.scrollX, d + window.scrollY)
+    if (Math.abs(d) <= e) {
         return;
     }
 
-    var distanceToScroll =  s * d / fps;
+    cp += s * d / fps;
 
-    window.scrollTo(window.scrollX, distanceToScroll + window.scrollY);
+    f(cp);
 
     setTimeout(_ => {
-        expDecayScroll(d - distanceToScroll, s);
+        expDecayAnimate(f, fp, cp, s);
     }, ms / fps);
 }
 
-function temp_scroll_roll() {
+function bringStatusIntoView() {
 
     var scrollDist = window.pageYOffset;
     var windowHeight = window.innerHeight;
@@ -145,8 +148,8 @@ function temp_scroll_roll() {
 
     var pos = $('status').getBoundingClientRect().top;
 
-    var targets = [     windowHeight / 3
-                  , 2 * windowHeight / 3
+    var targets = [ windowHeight / 4
+                  , windowHeight / 3
                   ] ;
 
     targets[0] = Math.min(targets[0], pos + scrollDist);
@@ -174,14 +177,35 @@ function temp_scroll_roll() {
     var target = targets[intArgMin(x => Math.abs(pos - targets[x]), 0, 1)];
 
     var distToScroll = pos - target;
-    alert(distToScroll)
 
-    expDecayScroll(distToScroll, 10);
+    expDecayAnimate(x => window.scrollTo(window.scrollX, x), distToScroll + scrollDist, scrollDist);
+}
+
+function createStatusMessage(message, color) {
+    switch (color) {
+        case 'green': var bg = '#98e3a1';
+                      var bc = '#80d090';
+                      break;
+        default: return;
+    }
+    var div = document.createElement('div');
+    div.className = 'WarningResponse';
+    div.id = 'status';
+    div.style.backgroundColor = bg;
+    div.style.borderColor = bc;
+    var innerText = document.createElement('div');
+    innerText.innerHTML = message;
+    div.appendChild(innerText);
+    return div;
 }
 
 function sendRequest() {
 
-    temp_scroll_roll();
+    /** USAGE EXAMPLE */
+    $('app').appendChild(createStatusMessage('<b>Warning</b> Oi da, ikkje alt gjekk etter planen<br>Prøv igjen!', 'green'));
+    expDecayAnimate(x => $('status').style.opacity = x, 1.0, 0.0, 4);
+    bringStatusIntoView();
+    /** */
 
     var chosenID = $('velg_id').children[0].value;
     if ($('velg_id').children[0].disabled) {
@@ -338,13 +362,3 @@ window.addEventListener('load', _ => {
 window.addEventListener('load', _ => {
     $('new_fields_button').addEventListener('click', addFormFields, false);
 });
-
-/** */
-window.addEventListener('scroll', _ => {
-    value = '';
-    value += 'Lenth scrolled: ' + window.pageYOffset + '<br>' // Height scrolled
-    value += window.innerHeight + '<br>'; // Height of "physical" screen
-    value += document.body.scrollHeight + '<br>'; // Height of entire document
-    value += $('status').getBoundingClientRect().top; // Distance from top of div to top of screen
-    $('scrollvalue').innerHTML = value;
-}, true);
