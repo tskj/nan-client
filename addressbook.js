@@ -119,8 +119,8 @@ function addFormFields(event) {
 
 function sendRequest() {
 
-    var chosenID = $('velg_id').children[0].value;
-    if ($('velg_id').children[0].disabled) {
+    var chosenID = $('ID_selector').value;
+    if ($('ID_selector').disabled) {
         chosenID = '';
     }
 
