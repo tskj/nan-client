@@ -117,7 +117,71 @@ function addFormFields(event) {
     inputFields.push(newForm);
 }
 
+function expDecayScroll(d, s) {
+
+    const fps = 100;
+
+    const ms = Math.pow(10, 3);
+    const e = 0.001;
+    if (Math.abs(d) < e) {
+        window.scrollTo(window.scrollX, d + window.scrollY)
+        return;
+    }
+
+    var distanceToScroll =  s * d / fps;
+
+    window.scrollTo(window.scrollX, distanceToScroll + window.scrollY);
+
+    setTimeout(_ => {
+        expDecayScroll(d - distanceToScroll, s);
+    }, ms / fps);
+}
+
+function temp_scroll_roll() {
+
+    var scrollDist = window.pageYOffset;
+    var windowHeight = window.innerHeight;
+    var docHeight = document.body.scrollHeight;
+
+    var pos = $('status').getBoundingClientRect().top;
+
+    var targets = [     windowHeight / 3
+                  , 2 * windowHeight / 3
+                  ] ;
+
+    targets[0] = Math.min(targets[0], pos + scrollDist);
+    targets[1] = Math.max(targets[1], windowHeight - docHeight + pos + scrollDist);
+    
+    var intArgMin = function(f, a, b) {
+
+        if (b < a) {
+            return;
+        }
+
+        var smallestf = f(a);
+        var smallestx = a;
+
+        for (var x = a; x <= b; x++) {
+            if (f(x) < smallestf) {
+                smallestf = f(x);
+                smallestx = x;
+            }
+        }
+
+        return smallestx;
+    };
+
+    var target = targets[intArgMin(x => Math.abs(pos - targets[x]), 0, 1)];
+
+    var distToScroll = pos - target;
+    alert(distToScroll)
+
+    expDecayScroll(distToScroll, 10);
+}
+
 function sendRequest() {
+
+    temp_scroll_roll();
 
     var chosenID = $('velg_id').children[0].value;
     if ($('velg_id').children[0].disabled) {
