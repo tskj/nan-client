@@ -1,4 +1,3 @@
-var _autoScroll = false;
 var _userScrolled = false;
 
 var currState = '';
@@ -166,7 +165,6 @@ function expDecayAnimate(f, cp, fp, s, finalize) {
 
     var abort = f(cp);
     if (abort) {
-        alert('aborting');
         return;
     }
 
@@ -213,6 +211,7 @@ function bringStatusIntoView() {
 
     var distToScroll = pos - target;
 
+    _userScrolled = false;
     expDecayAnimate(interruptibleScrollTo, scrollDist, distToScroll + scrollDist);
 }
 
@@ -235,15 +234,13 @@ function createStatusMessage(message, color) {
 }
 
 function interruptibleScrollTo(y) {
+    
     if (_userScrolled) {
         _userScrolled = false;
         return true;
     }
 
-    if (y != window.scrollY) {
-        _autoScroll = true;
-        window.scrollTo(window.scrollX, y);
-    }
+    window.scrollTo(window.scrollX, y);
 
     return false;
 }
@@ -411,12 +408,16 @@ window.addEventListener('load', _ => {
 window.addEventListener('load', _ => {
     $('new_fields_button').addEventListener('click', addFormFields, false);
 });
+window.addEventListener('load', _ => {
 
-window.onscroll = function() {
-    if (_autoScroll) {
-        _autoScroll = false;
-        return;
-    }
-    
-    _userScrolled = true;
-}
+    var stopAnim = function() {
+        _userScrolled = true;
+    };
+
+    window.addEventListener('mousedown', stopAnim);
+    window.addEventListener('mousewheel', stopAnim);
+    window.addEventListener('DOMMouseScroll', stopAnim);
+    window.addEventListener('keyup', stopAnim);
+    window.addEventListener('wheel', stopAnim);
+    window.addEventListener('touchmove', stopAnim);
+});
