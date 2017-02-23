@@ -1,3 +1,6 @@
+var _autoScroll = false;
+var _userScrolled = false;
+
 var currState = '';
 
 var inputFields = [];
@@ -133,7 +136,10 @@ function linearAnimate(f, cp, fp, s, finalize) {
 
     cp += s / fps;
 
-    f(cp);
+    const abort = f(cp);
+    if (abort) {
+        return;
+    }
 
     setTimeout(_ => {
         linearAnimate(f, cp, fp, s, finalize);
@@ -158,7 +164,11 @@ function expDecayAnimate(f, cp, fp, s, finalize) {
 
     cp += s * d / fps;
 
-    f(cp);
+    var abort = f(cp);
+    if (abort) {
+        alert('aborting');
+        return;
+    }
 
     setTimeout(_ => {
         expDecayAnimate(f, cp, fp, s, finalize);
@@ -203,7 +213,7 @@ function bringStatusIntoView() {
 
     var distToScroll = pos - target;
 
-    expDecayAnimate(x => window.scrollTo(window.scrollX, x), scrollDist, distToScroll + scrollDist);
+    expDecayAnimate(interruptibleScrollTo, scrollDist, distToScroll + scrollDist);
 }
 
 function createStatusMessage(message, color) {
@@ -222,6 +232,20 @@ function createStatusMessage(message, color) {
     innerText.innerHTML = message;
     div.appendChild(innerText);
     return div;
+}
+
+function interruptibleScrollTo(y) {
+    if (_userScrolled) {
+        _userScrolled = false;
+        return true;
+    }
+
+    if (y != window.scrollY) {
+        _autoScroll = true;
+        window.scrollTo(window.scrollX, y);
+    }
+
+    return false;
 }
 
 function sendRequest() {
@@ -387,3 +411,12 @@ window.addEventListener('load', _ => {
 window.addEventListener('load', _ => {
     $('new_fields_button').addEventListener('click', addFormFields, false);
 });
+
+window.onscroll = function() {
+    if (_autoScroll) {
+        _autoScroll = false;
+        return;
+    }
+    
+    _userScrolled = true;
+}
