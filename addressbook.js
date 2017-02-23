@@ -420,11 +420,11 @@ function initializeState() {
     pane_selector.style.paddingBottom = '5px';
     document.body.appendChild(pane_selector);
 
-    // get existing fields, only without ids
+    // get existing fields, only with text fields without ids
     var existingInputFields = document.getElementsByClassName('inputfield');
     var inputForm = [];
     for (var i = 0, n; n = existingInputFields[i]; i++) {
-        if (n.id === '' && n.tagName === 'P') inputForm.push(n);
+        if (n.firstElementChild.id === '' && n.tagName === 'P') inputForm.push(n);
     }
 
     inputFields.push(inputForm);
@@ -434,10 +434,8 @@ function initializeState() {
 
 window.addEventListener('load', initializeState, false);
 window.addEventListener('load', _ => {
-    $('submit_button').addEventListener('click', sendRequest, false);
-}, false);
-window.addEventListener('load', _ => {
     $('submit_button').style.opacity = 1;
+    $('submit_button').addEventListener('click', sendRequest, false);
     $('submit_button').addEventListener('mouseover', _ => {
         if ($('submit_button').style.opacity < '0.01') {
             expDecayAnimate(x => {$('submit_button').style.opacity = x; return false;}, 0, 1, 10)}
