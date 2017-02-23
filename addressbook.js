@@ -1,3 +1,5 @@
+var _userScrolled = false;
+
 var currState = '';
 
 var inputFields = [];
@@ -117,7 +119,139 @@ function addFormFields(event) {
     inputFields.push(newForm);
 }
 
+function linearAnimate(f, cp, fp, s, finalize) {
+
+    s = (typeof s !== 'undefined') ? s : 1000;
+    finalize = (typeof finalize !== 'undefined') ? finalize : _ => {return;};
+
+    const fps = 100;
+    const ms = Math.pow(10, 3);
+
+    if (s > 0 && cp > fp || s < 0 && cp < fp) {
+        f(fp);
+        finalize();
+        return;
+    }
+
+    cp += s / fps;
+
+    const abort = f(cp);
+    if (abort) {
+        return;
+    }
+
+    setTimeout(_ => {
+        linearAnimate(f, cp, fp, s, finalize);
+    }, ms / fps);
+}
+
+function expDecayAnimate(f, cp, fp, s, finalize) {
+
+    s = (typeof s !== 'undefined') ? s : 10;
+    finalize = (typeof finalize !== 'undefined') ? finalize : _ => {return;};
+
+    const d = fp - cp;
+
+    const fps = 100;
+
+    const ms = Math.pow(10, 3);
+    const e = 0.001;
+    if (Math.abs(d) <= e) {
+        finalize();
+        return;
+    }
+
+    cp += s * d / fps;
+
+    var abort = f(cp);
+    if (abort) {
+        return;
+    }
+
+    setTimeout(_ => {
+        expDecayAnimate(f, cp, fp, s, finalize);
+    }, ms / fps);
+}
+
+function bringStatusIntoView() {
+
+    var scrollDist = window.pageYOffset;
+    var windowHeight = window.innerHeight;
+    var docHeight = document.body.scrollHeight;
+
+    var pos = $('status').getBoundingClientRect().top;
+
+    var targets = [ windowHeight / 4
+                  , windowHeight / 3
+                  ] ;
+
+    targets[0] = Math.min(targets[0], pos + scrollDist);
+    targets[1] = Math.max(targets[1], windowHeight - docHeight + pos + scrollDist);
+    
+    var intArgMin = function(f, a, b) {
+
+        if (b < a) {
+            return;
+        }
+
+        var smallestf = f(a);
+        var smallestx = a;
+
+        for (var x = a; x <= b; x++) {
+            if (f(x) < smallestf) {
+                smallestf = f(x);
+                smallestx = x;
+            }
+        }
+
+        return smallestx;
+    };
+
+    var target = targets[intArgMin(x => Math.abs(pos - targets[x]), 0, 1)];
+
+    var distToScroll = pos - target;
+
+    _userScrolled = false;
+    expDecayAnimate(interruptibleScrollTo, scrollDist, distToScroll + scrollDist);
+}
+
+function createStatusMessage(message, color) {
+    switch (color) {
+        case 'green': var bg = '#98e3a1';
+                      var bc = '#80d090';
+                      break;
+        default: return;
+    }
+    var div = document.createElement('div');
+    div.className = 'WarningResponse';
+    div.id = 'status';
+    div.style.backgroundColor = bg;
+    div.style.borderColor = bc;
+    var innerText = document.createElement('div');
+    innerText.innerHTML = message;
+    div.appendChild(innerText);
+    return div;
+}
+
+function interruptibleScrollTo(y) {
+    
+    if (_userScrolled) {
+        _userScrolled = false;
+        return true;
+    }
+
+    window.scrollTo(window.scrollX, y);
+
+    return false;
+}
+
 function sendRequest() {
+
+    /** USAGE EXAMPLE */
+    $('app').appendChild(createStatusMessage('<b>Warning</b> Oi da, ikkje alt gjekk etter planen<br>Prøv igjen!', 'green'));
+    expDecayAnimate(x => {$('status').style.opacity = x; return false;}, 0.0, 1.0, 4);
+    bringStatusIntoView();
+    /** */
 
     var chosenID = $('ID_selector').value;
     if ($('ID_selector').disabled) {
@@ -273,4 +407,17 @@ window.addEventListener('load', _ => {
 }, false);
 window.addEventListener('load', _ => {
     $('new_fields_button').addEventListener('click', addFormFields, false);
+});
+window.addEventListener('load', _ => {
+
+    var stopAnim = function() {
+        _userScrolled = true;
+    };
+
+    window.addEventListener('mousedown', stopAnim);
+    window.addEventListener('mousewheel', stopAnim);
+    window.addEventListener('DOMMouseScroll', stopAnim);
+    window.addEventListener('keyup', stopAnim);
+    window.addEventListener('wheel', stopAnim);
+    window.addEventListener('touchmove', stopAnim);
 });
