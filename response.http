@@ -1,0 +1,11 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Connection: close
+
+<?xml version="1.0" encoding="UTF-8"?>
+<contacts>
+	<contact><id>1</id><name>Tarjei Skjærset</name><tlf>45 45 96 15</tlf></contact>
+	<contact><id>2</id><name>Hansen</name><tlf>555 1234</tlf></contact>
+	<contact><id>3</id><name></name><tlf>123456</tlf></contact>
+	<contact><id>4</id><name>Judith</name><tlf>977 90 693</tlf></contact>
+</contacts>
