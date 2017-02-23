@@ -117,9 +117,33 @@ function addFormFields(event) {
     inputFields.push(newForm);
 }
 
-function expDecayAnimate(f, fp, cp, s) {
+function linearAnimate(f, cp, fp, s, finalize) {
+
+    s = (typeof s !== 'undefined') ? s : 1000;
+    finalize = (typeof finalize !== 'undefined') ? finalize : _ => {return;};
+
+    const fps = 100;
+    const ms = Math.pow(10, 3);
+
+    if (s > 0 && cp > fp || s < 0 && cp < fp) {
+        f(fp);
+        finalize();
+        return;
+    }
+
+    cp += s / fps;
+
+    f(cp);
+
+    setTimeout(_ => {
+        linearAnimate(f, cp, fp, s, finalize);
+    }, ms / fps);
+}
+
+function expDecayAnimate(f, cp, fp, s, finalize) {
 
     s = (typeof s !== 'undefined') ? s : 10;
+    finalize = (typeof finalize !== 'undefined') ? finalize : _ => {return;};
 
     const d = fp - cp;
 
@@ -128,6 +152,7 @@ function expDecayAnimate(f, fp, cp, s) {
     const ms = Math.pow(10, 3);
     const e = 0.001;
     if (Math.abs(d) <= e) {
+        finalize();
         return;
     }
 
@@ -136,7 +161,7 @@ function expDecayAnimate(f, fp, cp, s) {
     f(cp);
 
     setTimeout(_ => {
-        expDecayAnimate(f, fp, cp, s);
+        expDecayAnimate(f, cp, fp, s, finalize);
     }, ms / fps);
 }
 
@@ -178,7 +203,7 @@ function bringStatusIntoView() {
 
     var distToScroll = pos - target;
 
-    expDecayAnimate(x => window.scrollTo(window.scrollX, x), distToScroll + scrollDist, scrollDist);
+    expDecayAnimate(x => window.scrollTo(window.scrollX, x), scrollDist, distToScroll + scrollDist);
 }
 
 function createStatusMessage(message, color) {
@@ -203,7 +228,7 @@ function sendRequest() {
 
     /** USAGE EXAMPLE */
     $('app').appendChild(createStatusMessage('<b>Warning</b> Oi da, ikkje alt gjekk etter planen<br>Prøv igjen!', 'green'));
-    expDecayAnimate(x => $('status').style.opacity = x, 1.0, 0.0, 4);
+    expDecayAnimate(x => $('status').style.opacity = x, 0.0, 1.0, 4);
     bringStatusIntoView();
     /** */
 
