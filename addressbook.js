@@ -252,7 +252,7 @@ function sendRequest() {
 
     /** USAGE EXAMPLE */
     $('app').appendChild(createStatusMessage('<b>Warning</b> Oi da, ikkje alt gjekk etter planen<br>Prøv igjen!', 'green'));
-    expDecayAnimate(x => $('status').style.opacity = x, 0.0, 1.0, 4);
+    expDecayAnimate(x => {$('status').style.opacity = x; return false;}, 0.0, 1.0, 4);
     bringStatusIntoView();
     /** */
 
