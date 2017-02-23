@@ -1,14 +1,27 @@
+html {
+    width: 100%;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
 body {
     background-color: #f0f0f0;
     font-family: sans-serif;
     margin: 0 auto;
-    margin-bottom: 100px;
     width: 52%;
 }
 
 .dropshadow {
     box-shadow: 0px 0px 80px 1px #cccccc;
     z-index: 10;
+}
+
+.rowShadow {
+    margin: 0 auto;
+    padding: 0;
+    box-shadow: 0px 0px 40px 1px #cccccc;
+    position: relative;
+    z-index: -1;
 }
 
 .menu ul {
@@ -205,22 +218,22 @@ body {
     border-color: #70f080;
 }
 
-#results {
-    background-color: #fafafa;
+.results {
     margin-top: 50;
-    margin-bottom: 100;
 }
 
-#results ul {
+.results ul {
     list-style-type: none;
     margin: 0 auto;
+    position: relative;
     padding: 0;
     height: 50px;
     line-height: 25px;
     overflow: hidden;
+    z-index: 1;
 }
 
-#results .th {
+.results .th {
     list-style-type: none;
     background-color: #f0f0f0;
     font-weight: bold;
@@ -231,33 +244,33 @@ body {
     overflow: hidden;
 }
 
-#results li {
+.results li {
     position: relative;
     float: left;
     width: 33.3%;
     height: 40px;
 }
 
-#results div {
+.results div {
     display: block;
     text-align: center;
     font-size: 15px;
     padding: 13px;
 }
 
-#results > .tr_odd div {
+.results > .tr_odd div {
     color: #444444;
     font-weight: normal;
     background-color: #fafafa;
 }
 
-#results > .tr_even {
+.results > .tr_even {
     color: #444444;
     font-weight: normal;
     background-color: #f2f2f2;
 }
 
-#results div.greyed_out {
+.results div.greyed_out {
     color: #aaaaaa;
     font-weight: 100;
 }

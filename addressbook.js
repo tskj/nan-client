@@ -1,4 +1,5 @@
 var _userScrolled = false;
+var nrOfResults = 0;
 
 var currState = '';
 
@@ -117,6 +118,10 @@ function addFormFields(event) {
     });
 
     inputFields.push(newForm);
+}
+
+function insertAfter(newNode, referenceNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
 function linearAnimate(f, cp, fp, s, finalize) {
@@ -245,18 +250,26 @@ function interruptibleScrollTo(y) {
     return false;
 }
 
-function sendRequest() {
-
-    /** USAGE EXAMPLE */
-    $('app').appendChild(createStatusMessage('<b>Warning</b> Oi da, ikkje alt gjekk etter planen<br>Prøv igjen!', 'green'));
+function displayMessage(str, color) {
+    // Example text
+    str = '<b>Warning</b> Oi da, ikkje alt gjekk etter planen<br>Prøv igjen!';
+    color = 'green';
+    insertAfter(createStatusMessage(str, color), $('app').firstElementChild);
     expDecayAnimate(x => {$('status').style.opacity = x; return false;}, 0.0, 1.0, 4);
     bringStatusIntoView();
-    /** */
+}
+
+function sendRequest() {
 
     var chosenID = $('ID_selector').value;
     if ($('ID_selector').disabled) {
         chosenID = '';
     }
+
+    expDecayAnimate(x => {
+        $('submit_button').style.opacity = x;
+        return false;
+    }, 1, 0, 50);
 
     var xml = document.implementation.createDocument(null, 'contacts');
 
@@ -308,11 +321,15 @@ function handleResposne(req, reqVerb) {
         if (req.readyState === XMLHttpRequest.DONE) {
             if (req.status === 200 && reqVerb === 'GET') {
 
+                document.body.style.marginBottom = '200px';
+
                 var xml = (new DOMParser()).parseFromString(req.responseText, 'application/xml');
 
                 var results = document.createElement('div');
-                results.className = 'dropshadow';
-                results.id = 'results';
+                results.className = 'rowShadow results';
+                var resultsID = 'results' + nrOfResults;
+                results.id = resultsID
+                nrOfResults++;
 
                 var listDiv = function(name, grey) {
                     var div = document.createElement('div');
@@ -366,10 +383,24 @@ function handleResposne(req, reqVerb) {
                     oddRow = !oddRow;
                 }
 
-                if ($('results')) {
-                    $('results').remove();
-                }
-                $('app').appendChild(results);
+                insertAfter(results, $('app').firstElementChild);
+                $(resultsID).style.marginTop = -100;
+                $(resultsID).style.opacity = 0;
+                var fadeIn = _ => {
+                    expDecayAnimate(x => {
+                        $(resultsID).style.marginTop = x;
+                        /* Scrolling window along results
+                        window.scrollTo(window.pageXOffset, document.body.scrollHeight - window.innerHeight);
+                        */
+                        return false;
+                    }, -$(resultsID).clientHeight, 50, 10);
+                    expDecayAnimate(x => {
+                        $(resultsID).style.opacity = x;
+                        return false;
+                    }, 0, 1, 10);
+                };
+                // Delay after having prepared data, to showing it
+                setTimeout(fadeIn, 1);
             }
         }
     };
@@ -405,6 +436,14 @@ window.addEventListener('load', initializeState, false);
 window.addEventListener('load', _ => {
     $('submit_button').addEventListener('click', sendRequest, false);
 }, false);
+window.addEventListener('load', _ => {
+    $('submit_button').style.opacity = 1;
+    $('submit_button').addEventListener('mouseover', _ => {
+        if ($('submit_button').style.opacity < '0.01') {
+            expDecayAnimate(x => {$('submit_button').style.opacity = x; return false;}, 0, 1, 10)}
+        }
+    , false);
+});
 window.addEventListener('load', _ => {
     $('new_fields_button').addEventListener('click', addFormFields, false);
 });
