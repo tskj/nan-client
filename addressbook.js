@@ -1,4 +1,5 @@
 var _userScrolled = false;
+var _fadeOutWasAborted = false;
 var nrOfResults = 0;
 
 var currState = '';
@@ -250,12 +251,51 @@ function interruptibleScrollTo(y) {
     return false;
 }
 
+function interruptibleStatusFadeOut(f) {
+    
+    return o => {
+        if (_fadeOutWasAborted) {
+            f(5000);
+            $('status').style.opacity = 1;
+            $('status').style.filter = 'blur(0px)';
+            return true;
+        }
+
+        $('status').style.opacity = o;
+        o *= -1;
+        o++;
+        o *= 10;
+
+        $('status').style.filter = 'blur(' + o + 'px)';
+
+        return false;
+    }
+}
+
 function displayMessage(str, color) {
     // Example text
     str = '<b>Warning</b> Oi da, ikkje alt gjekk etter planen<br>Prøv igjen!';
     color = 'green';
     insertAfter(createStatusMessage(str, color), $('app').firstElementChild);
     expDecayAnimate(x => {$('status').style.opacity = x; return false;}, 0.0, 1.0, 4);
+    expDecayAnimate(x => {$('status').style.filter = 'blur(' + x + 'px)'; return false;}, 10.0, 0.0, 8);
+    var startFadeOutTimer = time => setTimeout( _ => {
+        if (_fadeOutWasAborted) {
+            _fadeOutWasAborted = false;
+            startFadeOutTimer(time);
+            return;
+        }
+
+        var currentMargin = parseFloat($('results' + (nrOfResults - 1)).style.marginTop.substring(0, 4));
+        var statusMarginTop = window.getComputedStyle($('status')).getPropertyValue('margin-top').substring(0, 2);
+        var statusMarginBottom = window.getComputedStyle($('status')).getPropertyValue('margin-bottom').substring(0, 2);
+        expDecayAnimate(interruptibleStatusFadeOut(startFadeOutTimer), 1.0, 0.0, 1, _ => expDecayAnimate(x => {
+            $('results' + (nrOfResults - 1)).style.marginTop = x;
+        }, currentMargin, currentMargin - ($('status').clientHeight + statusMarginTop + statusMarginBottom), 4));
+    }, time);
+    _fadeOutWasAborted = false;
+    startFadeOutTimer(5000);
+    $('status').addEventListener('mouseover', _ => _fadeOutWasAborted = true);
     bringStatusIntoView();
 }
 

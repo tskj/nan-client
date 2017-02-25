@@ -20,7 +20,7 @@ body {
 .rowShadow {
     margin: 0 auto;
     padding: 0;
-    box-shadow: 0px 0px 40px 1px #cccccc;
+    box-shadow: 0px 0px 10px 1px #cccccc;
     position: relative;
     z-index: -1;
 }
@@ -282,6 +282,8 @@ body {
     border-style: solid;
     margin-bottom: 50px;
     margin-top: 50px;
+    margin-left: 10px;
+    margin-right: 10px;
     height: 150px;
 }
 
