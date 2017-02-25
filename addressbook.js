@@ -1,6 +1,8 @@
 var _userScrolled = false;
 var _fadeOutWasAborted = false;
 var nrOfResults = 0;
+var nrOfStatuses = 0;
+var nrOfStatusAbortions = [];
 
 var currState = '';
 
@@ -179,13 +181,13 @@ function expDecayAnimate(f, cp, fp, s, finalize) {
     }, ms / fps);
 }
 
-function bringStatusIntoView() {
+function bringStatusIntoView(status) {
 
     var scrollDist = window.pageYOffset;
     var windowHeight = window.innerHeight;
     var docHeight = document.body.scrollHeight;
 
-    var pos = $('status').getBoundingClientRect().top;
+    var pos = $(status).getBoundingClientRect().top;
 
     var targets = [ windowHeight / 4
                   , windowHeight / 3
@@ -222,18 +224,34 @@ function bringStatusIntoView() {
 }
 
 function createStatusMessage(message, color) {
+
     switch (color) {
         case 'green': var bg = '#98e3a1';
                       var bc = '#80d090';
+                      var c  = '#f2ffef';
+                      var sh = '#a0caa0';
                       break;
-        default: return;
+        case 'red':   var bg = '#ff6770';
+                      var bc = '#d06070';
+                      var c  = '#fff2ef';
+                      var sh = '#caa0a0';
+                      break;
+        case 'orange':var bg = '#f5c268';
+                      var bc = '#e0a020';
+                      var c  = '#ffffe0';
+                      var sh = '#caa050';
+                      break;
     }
     var div = document.createElement('div');
     div.className = 'WarningResponse';
-    div.id = 'status';
+    var status = 'status' + nrOfStatuses;
+    div.id = status;
+    nrOfStatuses++;
     div.style.backgroundColor = bg;
     div.style.borderColor = bc;
     var innerText = document.createElement('div');
+    innerText.style.color = c;
+    innerText.style.textShadow = sh;
     innerText.innerHTML = message;
     div.appendChild(innerText);
     return div;
@@ -251,34 +269,58 @@ function interruptibleScrollTo(y) {
     return false;
 }
 
-function interruptibleStatusFadeOut(f) {
+function interruptibleStatusFadeOut(f, status) {
     
     return o => {
-        if (_fadeOutWasAborted) {
-            f(5000);
-            $('status').style.opacity = 1;
-            $('status').style.filter = 'blur(0px)';
-            return true;
+        if (nrOfStatusAbortions[status] < 2) {
+            if (_fadeOutWasAborted) {
+                $(status).style.opacity = 1;
+                $(status).style.filter = 'blur(0px)';
+                nrOfStatusAbortions[status]++;
+                if (nrOfStatusAbortions[status] < 2) {
+                    f(5000);
+                }
+                return true;
+            }
+            if (o < 0.3) {
+                if (nrOfResults > 0) {
+                    var currentMargin = parseFloat($('results' + (nrOfResults - 1)).style.marginTop.substring(0, 4));
+                    var statusMarginTop = parseFloat(window.getComputedStyle($(status)).getPropertyValue('margin-top').substring(0, 2));
+                    var statusMarginBottom = parseFloat(window.getComputedStyle($(status)).getPropertyValue('margin-bottom').substring(0, 2));
+                    expDecayAnimate(x => {
+                        $(status).nextElementSibling.style.marginTop = x;
+                    }, currentMargin, currentMargin - ($(status).clientHeight + statusMarginTop + statusMarginBottom) - 2, 4, _ => {
+                        $(status).nextElementSibling.style.marginTop = currentMargin;
+                        $(status).remove();
+                        nrOfStatuses--;
+                        nrOfStatusAbortions[status] = 0;
+                    });
+                }
+                nrOfStatusAbortions[status] = 2;
+            }
         }
 
-        $('status').style.opacity = o;
+        $(status).style.opacity = o;
         o *= -1;
         o++;
         o *= 10;
 
-        $('status').style.filter = 'blur(' + o + 'px)';
+        $(status).style.filter = 'blur(' + o + 'px)';
 
         return false;
     }
 }
 
-function displayMessage(str, color) {
-    // Example text
-    str = '<b>Warning</b> Oi da, ikkje alt gjekk etter planen<br>Prøv igjen!';
-    color = 'green';
+function displayMessage(str, color, permanent) {
+
+    permanent = (typeof permanent !== 'undefined') ? permanent : false;
+
+    var status = 'status' + nrOfStatuses;
+    nrOfStatusAbortions[status] = 0;
+
     insertAfter(createStatusMessage(str, color), $('app').firstElementChild);
-    expDecayAnimate(x => {$('status').style.opacity = x; return false;}, 0.0, 1.0, 4);
-    expDecayAnimate(x => {$('status').style.filter = 'blur(' + x + 'px)'; return false;}, 10.0, 0.0, 8);
+    expDecayAnimate(x => {$(status).style.opacity = x; return false;}, 0.0, 1.0, 4);
+    expDecayAnimate(x => {$(status).style.filter = 'blur(' + x + 'px)'; return false;}, 10.0, 0.0, 8);
     var startFadeOutTimer = time => setTimeout( _ => {
         if (_fadeOutWasAborted) {
             _fadeOutWasAborted = false;
@@ -286,17 +328,14 @@ function displayMessage(str, color) {
             return;
         }
 
-        var currentMargin = parseFloat($('results' + (nrOfResults - 1)).style.marginTop.substring(0, 4));
-        var statusMarginTop = window.getComputedStyle($('status')).getPropertyValue('margin-top').substring(0, 2);
-        var statusMarginBottom = window.getComputedStyle($('status')).getPropertyValue('margin-bottom').substring(0, 2);
-        expDecayAnimate(interruptibleStatusFadeOut(startFadeOutTimer), 1.0, 0.0, 1, _ => expDecayAnimate(x => {
-            $('results' + (nrOfResults - 1)).style.marginTop = x;
-        }, currentMargin, currentMargin - ($('status').clientHeight + statusMarginTop + statusMarginBottom), 4));
+        expDecayAnimate(interruptibleStatusFadeOut(startFadeOutTimer, status), 1.0, 0.0, 1);
     }, time);
     _fadeOutWasAborted = false;
-    startFadeOutTimer(5000);
-    $('status').addEventListener('mouseover', _ => _fadeOutWasAborted = true);
-    bringStatusIntoView();
+    $(status).addEventListener('mouseover', _ => _fadeOutWasAborted = true);
+    if (!permanent) {
+        startFadeOutTimer(5000);
+    }
+    bringStatusIntoView(status);
 }
 
 function sendRequest() {
@@ -429,9 +468,6 @@ function handleResposne(req, reqVerb) {
                 var fadeIn = _ => {
                     expDecayAnimate(x => {
                         $(resultsID).style.marginTop = x;
-                        /* Scrolling window along results
-                        window.scrollTo(window.pageXOffset, document.body.scrollHeight - window.innerHeight);
-                        */
                         return false;
                     }, -$(resultsID).clientHeight, 50, 10);
                     expDecayAnimate(x => {
