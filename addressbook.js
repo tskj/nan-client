@@ -285,6 +285,7 @@ function interruptibleStatusFadeOut(f, status) {
             if (o < 0.3) {
                 if (nrOfResults > 0) {
                     var currentMargin = parseFloat($('results' + (nrOfResults - 1)).style.marginTop.substring(0, 4));
+                    currentMargin = 50;
                     var statusMarginTop = parseFloat(window.getComputedStyle($(status)).getPropertyValue('margin-top').substring(0, 2));
                     var statusMarginBottom = parseFloat(window.getComputedStyle($(status)).getPropertyValue('margin-bottom').substring(0, 2));
                     expDecayAnimate(x => {
@@ -328,7 +329,13 @@ function displayMessage(str, color, permanent) {
             return;
         }
 
-        expDecayAnimate(interruptibleStatusFadeOut(startFadeOutTimer, status), 1.0, 0.0, 1);
+        expDecayAnimate(interruptibleStatusFadeOut(startFadeOutTimer, status), 1.0, 0.0, 1, _ => {
+            if ($(status)) {
+                $(status).remove();
+                nrOfStatuses--;
+                nrOfStatusAbortions[status] = 0;
+            }
+        });
     }, time);
     _fadeOutWasAborted = false;
     $(status).addEventListener('mouseover', _ => _fadeOutWasAborted = true);
@@ -339,6 +346,10 @@ function displayMessage(str, color, permanent) {
 }
 
 function sendRequest() {
+
+    if ($('submit_button').opacity < 0.1) {
+        return;
+    }
 
     var chosenID = $('ID_selector').value;
     if ($('ID_selector').disabled) {
@@ -385,19 +396,26 @@ function sendRequest() {
         case 'put_pane':    reqVerb = 'PUT';
                             break;
         case 'delete_pane': reqVerb = 'DELETE';
+                            break;
         default:            return;
     }
 
     var req = new XMLHttpRequest();
     req.open(reqVerb, apiResourcePath + chosenID, true);
     req.setRequestHeader('Content-Type', 'application/xml');
-    req.onreadystatechange = handleResposne(req, reqVerb);
+    req.onreadystatechange = handleResponse(req, reqVerb, chosenID);
     req.send(xml);
 }
 
-function handleResposne(req, reqVerb) {
+function handleResponse(req, reqVerb, _id) {
     return _ => {
+        if ($('submit_button').style.opacity < '0.01') {
+            expDecayAnimate(x => {$('submit_button').style.opacity = x; return false;}, 0, 1, 10);
+        }
         if (req.readyState === XMLHttpRequest.DONE) {
+            function formatBold(str) {
+                return '<b>'+str+'</b> '
+            }
             if (req.status === 200 && reqVerb === 'GET') {
 
                 document.body.style.marginBottom = '200px';
@@ -477,6 +495,36 @@ function handleResposne(req, reqVerb) {
                 };
                 // Delay after having prepared data, to showing it
                 setTimeout(fadeIn, 1);
+            } else if (req.status === 204 && reqVerb === 'GET') {
+                if (_id === '') {
+                    displayMessage(formatBold('No Content') + 'Tom database', 'orange', false);
+                } else {
+                    displayMessage(formatBold('No Content') + 'Ingen treff funne for ID: ' + _id, 'orange', false);
+                }
+            } else if (req.status === 404) {
+                displayMessage(formatBold('Not Found') + 'Ingen treff funne' + ((reqVerb === 'PUT') ? '<br>Database uforandra' : '<br>Ingen ting blei sletta'), 'orange', false);
+            } else if (req.status === 200 && reqVerb === 'DELETE') {
+                if (_id === '') {
+                    displayMessage(formatBold('DELETED ') + 'Database sletta', 'green', true);
+                } else {
+                    displayMessage(formatBold('DELETED ') + _id + ' blei sletta', 'green', true);
+                }
+            } else if (req.status === 500) {
+                displayMessage(formatBold('Internal Server Error') + 'Ein feil har oppstått<br>Ingen forandringar blei gjort<br>', 'red', false);
+            } else if (req.status === 400) {
+                displayMessage(formatBold('Bad Request') + 'Ingen forandring blei utført<br>Pass på at ID er eit heiltal<br>Telefonnummer må oppggjevast, men namn kan mangle', 'orange', false);
+            } else if (req.status === 200 && reqVerb === 'PUT') {
+                displayMessage(formatBold('OK') + _id + ' blei oppdatert', 'green', true);
+            } else if (req.status === 201 && reqVerb === 'POST') {
+                displayMessage(formatBold('OK') + req.responseText + ' rader lagt til', 'green', true);
+            } else if (req.status === 405 && reqVerb === 'POST') {
+                displayMessage(formatBold('Not Allowed') + 'Ei eller fleire rader finnast frå før<br>Ingen rader oppdatert', 'orange', false);
+            } else {
+                if (req.status === 0) {
+                    displayMessage(formatBold('Ingen Svar') + 'Serveren svarar ikkje<br>Sjekk internettforbindelsen', 'red', false);
+                } else {
+                    displayMessage(formatBold(req.status) + 'Uventa feil oppstod', 'red', false);
+                }
             }
         }
     };
