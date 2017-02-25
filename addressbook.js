@@ -530,7 +530,7 @@ window.addEventListener('load', _ => {
     window.addEventListener('mousedown', stopAnim);
     window.addEventListener('mousewheel', stopAnim);
     window.addEventListener('DOMMouseScroll', stopAnim);
-    window.addEventListener('keyup', stopAnim);
+    window.addEventListener('keydown', stopAnim);
     window.addEventListener('wheel', stopAnim);
     window.addEventListener('touchmove', stopAnim);
 });
