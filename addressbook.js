@@ -364,14 +364,23 @@ function sendRequest() {
         chosenID = '';
     }
 
+    _responseReceived = false;
     var spinner = document.createElement('canvas');
     spinner.id = 'spinner';
     insertAfter(spinner, $('submit_button'));
     sigmoidAnimate(x => {
+        if (_responseReceived) {
+            $('spinner').remove();
+            return true;
+        }
         $('spinner').style.opacity = -x + 1;
+        $('spinner').style.transform = 'scale(' + (1 - x) + ')';
         return false;
     }, 1, 0, 1);
     expDecayAnimate(x => {
+        if (_responseReceived) {
+            return true;
+        }
         $('submit_button').style.opacity = x;
         return false;
     }, 1, 0, 50);
@@ -425,9 +434,17 @@ function sendRequest() {
 
 function handleResponse(req, reqVerb, _id) {
     return _ => {
-        if ($('submit_button').style.opacity < '0.01') {
+        _responseReceived = true;
+        if ($('submit_button').style.opacity < '0.9') {
             expDecayAnimate(x => {$('submit_button').style.opacity = x; return false;}, 0, 1, 10);
-            sigmoidAnimate(x => {$('spinner').style.opacity = x; return false;}, 1, 0, 2, _ => {
+            sigmoidAnimate(x => {
+                if (!$('spinner')) {
+                    return true;
+                }
+                $('spinner').style.opacity = x;
+                $('spinner').style.transform = 'scale(' + x + ')';
+                return false;
+            }, 1, 0, 2, _ => {
                 $('spinner').remove();
             });
             $('submit_button').style.cursor = 'pointer';
