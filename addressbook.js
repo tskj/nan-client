@@ -547,11 +547,6 @@ function initializeState() {
 
     var pane_selector = document.createElement('div');
     pane_selector.id = 'bar';
-    pane_selector.style.backgroundColor = '#3088ff';
-    pane_selector.style.position = 'absolute';
-    pane_selector.style.width = '100%'
-    pane_selector.style.paddingTop = '0px';
-    pane_selector.style.paddingBottom = '5px';
     document.body.appendChild(pane_selector);
 
     // get existing fields, only with text fields without ids
