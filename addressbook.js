@@ -364,6 +364,13 @@ function sendRequest() {
         chosenID = '';
     }
 
+    var spinner = document.createElement('canvas');
+    spinner.id = 'spinner';
+    insertAfter(spinner, $('submit_button'));
+    sigmoidAnimate(x => {
+        $('spinner').style.opacity = -x + 1;
+        return false;
+    }, 1, 0, 1);
     expDecayAnimate(x => {
         $('submit_button').style.opacity = x;
         return false;
@@ -420,6 +427,9 @@ function handleResponse(req, reqVerb, _id) {
     return _ => {
         if ($('submit_button').style.opacity < '0.01') {
             expDecayAnimate(x => {$('submit_button').style.opacity = x; return false;}, 0, 1, 10);
+            sigmoidAnimate(x => {$('spinner').style.opacity = x; return false;}, 1, 0, 2, _ => {
+                $('spinner').remove();
+            });
             $('submit_button').style.cursor = 'pointer';
         }
         if (req.readyState === XMLHttpRequest.DONE) {

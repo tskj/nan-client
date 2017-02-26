@@ -68,6 +68,7 @@ body {
 }
 
 .inputform {
+    position: relative;
     padding: 0.05;
     font-family: Verdana;
     background-color: #fafafa;
@@ -227,6 +228,18 @@ body {
     border-style: solid;
     border-width: 1px 1px 1px 1px;
     border-color: #70f080;
+}
+
+#spinner {
+    position: absolute;
+    width: 10vw;
+    height: 10vw;
+    margin: 0 auto;
+    margin-left: calc(50% - 5vw);
+    margin-top: -250px;
+    background-image: url(img/spinner.gif);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
 }
 
 .results {
