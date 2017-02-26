@@ -153,6 +153,12 @@ function linearAnimate(f, cp, fp, s, finalize) {
     }, ms / fps);
 }
 
+function sigmoidAnimate(f, cp, fp, s, finalize) {
+    linearAnimate( x => {
+        return f(Math.max(fp, cp) + (fp - cp) / (1 + Math.exp(-10 * (x - 0.5))));
+    }, 0, 1, s, finalize);
+}
+
 function expDecayAnimate(f, cp, fp, s, finalize) {
 
     s = (typeof s !== 'undefined') ? s : 10;
@@ -288,9 +294,9 @@ function interruptibleStatusFadeOut(f, status) {
                     currentMargin = 50;
                     var statusMarginTop = parseFloat(window.getComputedStyle($(status)).getPropertyValue('margin-top').substring(0, 2));
                     var statusMarginBottom = parseFloat(window.getComputedStyle($(status)).getPropertyValue('margin-bottom').substring(0, 2));
-                    expDecayAnimate(x => {
+                    sigmoidAnimate(x => {
                         $(status).nextElementSibling.style.marginTop = x;
-                    }, currentMargin, currentMargin - ($(status).clientHeight + statusMarginTop + statusMarginBottom) - 2, 4, _ => {
+                    }, currentMargin, currentMargin - ($(status).clientHeight + statusMarginTop + statusMarginBottom) - 2, 1, _ => {
                         $(status).nextElementSibling.style.marginTop = currentMargin;
                         $(status).remove();
                         nrOfStatuses--;
@@ -329,12 +335,14 @@ function displayMessage(str, color, permanent) {
             return;
         }
 
-        expDecayAnimate(interruptibleStatusFadeOut(startFadeOutTimer, status), 1.0, 0.0, 1, _ => {
-            if ($(status)) {
-                $(status).remove();
-                nrOfStatuses--;
-                nrOfStatusAbortions[status] = 0;
-            }
+        sigmoidAnimate(interruptibleStatusFadeOut(startFadeOutTimer, status), 1.0, 0.0, 1, _ => {
+            setTimeout( _ => {
+                if ($(status)) {
+                    $(status).remove();
+                    nrOfStatuses--;
+                    nrOfStatusAbortions[status] = 0;
+                }
+            }, 3000);
         });
     }, time);
     _fadeOutWasAborted = false;
@@ -360,6 +368,7 @@ function sendRequest() {
         $('submit_button').style.opacity = x;
         return false;
     }, 1, 0, 50);
+    $('submit_button').style.cursor = 'auto';
 
     var xml = document.implementation.createDocument(null, 'contacts');
 
@@ -411,6 +420,7 @@ function handleResponse(req, reqVerb, _id) {
     return _ => {
         if ($('submit_button').style.opacity < '0.01') {
             expDecayAnimate(x => {$('submit_button').style.opacity = x; return false;}, 0, 1, 10);
+            $('submit_button').style.cursor = 'pointer';
         }
         if (req.readyState === XMLHttpRequest.DONE) {
             function formatBold(str) {
@@ -560,11 +570,6 @@ window.addEventListener('load', initializeState, false);
 window.addEventListener('load', _ => {
     $('submit_button').style.opacity = 1;
     $('submit_button').addEventListener('click', sendRequest, false);
-    $('submit_button').addEventListener('mouseover', _ => {
-        if ($('submit_button').style.opacity < '0.01') {
-            expDecayAnimate(x => {$('submit_button').style.opacity = x; return false;}, 0, 1, 10)}
-        }
-    , false);
 });
 window.addEventListener('load', _ => {
     $('new_fields_button').addEventListener('click', addFormFields, false);
