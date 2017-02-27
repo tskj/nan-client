@@ -353,6 +353,29 @@ function displayMessage(str, color, permanent) {
     bringStatusIntoView(status);
 }
 
+function createSpinnerOn(e, _marginBottom) {
+
+    _marginBottom = (typeof _marginBottom !== 'undefined') ? _marginBottom : 50;
+
+    _cancelSpinner = false;
+    if ($('spinner')) {
+        $('spinner').remove();
+    }
+    var spinner = document.createElement('canvas');
+    spinner.id = 'spinner';
+    spinner.style.marginBottom = _marginBottom;
+    insertAfter(spinner, e);
+    sigmoidAnimate(x => {
+        if (_cancelSpinner) {
+            $('spinner').remove();
+            return true;
+        }
+        $('spinner').style.opacity = -x + 1;
+        $('spinner').style.transform = 'scale(' + (1 - x) + ')';
+        return false;
+    }, 1, 0, 1);
+}
+
 function sendRequest() {
 
     if ($('submit_button').opacity < 0.1) {
@@ -364,21 +387,9 @@ function sendRequest() {
         chosenID = '';
     }
 
-    _responseReceived = false;
-    var spinner = document.createElement('canvas');
-    spinner.id = 'spinner';
-    insertAfter(spinner, $('submit_button'));
-    sigmoidAnimate(x => {
-        if (_responseReceived) {
-            $('spinner').remove();
-            return true;
-        }
-        $('spinner').style.opacity = -x + 1;
-        $('spinner').style.transform = 'scale(' + (1 - x) + ')';
-        return false;
-    }, 1, 0, 1);
+    createSpinnerOn($('submit_button'));
     expDecayAnimate(x => {
-        if (_responseReceived) {
+        if (_cancelSpinner) {
             return true;
         }
         $('submit_button').style.opacity = x;
@@ -434,7 +445,7 @@ function sendRequest() {
 
 function handleResponse(req, reqVerb, _id) {
     return _ => {
-        _responseReceived = true;
+        _cancelSpinner = true;
         if ($('submit_button').style.opacity < '0.9') {
             expDecayAnimate(x => {$('submit_button').style.opacity = x; return false;}, 0, 1, 10);
             sigmoidAnimate(x => {
@@ -588,6 +599,21 @@ function initializeState() {
     setState('get_pane');
 }
 
+$('app').style.marginTop = '-1000px';
+createSpinnerOn(document.getElementsByTagName('body')[0], '25%');
+window.addEventListener('load', _ =>  {
+    expDecayAnimate(x => {
+        $('app').style.marginTop = x;
+        return false;
+    }, -1000, 0, 10);
+    _cancelSpinner = true;
+    if ($('spinner')) {
+        sigmoidAnimate(x => {
+            $('spinner').style.opacity = x;
+            return false;
+        }, 1, 0, 1, _ => {$('spinner').remove()});
+    }
+});
 window.addEventListener('load', initializeState, false);
 window.addEventListener('load', _ => {
     $('submit_button').style.opacity = 1;
