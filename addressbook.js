@@ -536,7 +536,7 @@ function handleResponse(req, reqVerb, _id) {
                 if (_id === '') {
                     displayMessage(formatBold('No Content') + 'Tom database', 'orange', false);
                 } else {
-                    displayMessage(formatBold('No Content') + 'Ingen treff funne for ID: ' + _id, 'orange', false);
+                    displayMessage(formatBold('No Content') + 'Ingen treff funne for ID ' + _id, 'orange', false);
                 }
             } else if (req.status === 404) {
                 displayMessage(formatBold('Not Found') + 'Ingen treff funne' + ((reqVerb === 'PUT') ? '<br>Database uforandra' : '<br>Ingen ting blei sletta'), 'orange', false);
