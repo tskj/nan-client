@@ -4,14 +4,17 @@ WEBUSER=www
 APIROOT=/www/addressbook
 
 sudo rm -r $APIROOT 2> /dev/null
-sudo mkdir $APIROOT
+sudo mkdir -p $APIROOT
 
 sudo cp *.html $APIROOT 2> /dev/null
 sudo cp *.css $APIROOT 2> /dev/null
 sudo cp *.js $APIROOT 2> /dev/null
+
+sudo cp -r img $APIROOT 2> /dev/null
 
 sudo chown -R $WEBUSER $APIROOT
 sudo chgrp -R $WEBUSER $APIROOT
 
 sudo chmod 755 $APIROOT
 sudo chmod -R 664 $APIROOT/*
+sudo chmod 755 $APIROOT/img
