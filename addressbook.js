@@ -599,20 +599,22 @@ function initializeState() {
     setState('get_pane');
 }
 
-$('app').style.marginTop = '-1000px';
 createSpinnerOn(document.getElementsByTagName('body')[0], '25%');
+$('app').firstElementChild.remove();
 window.addEventListener('load', _ =>  {
-    expDecayAnimate(x => {
-        $('app').style.marginTop = x;
-        return false;
-    }, -1000, 0, 10);
-    _cancelSpinner = true;
-    if ($('spinner')) {
-        sigmoidAnimate(x => {
-            $('spinner').style.opacity = x;
+    setTimeout( _ => {
+        expDecayAnimate(x => {
+            $('app').style.marginTop = x;
             return false;
-        }, 1, 0, 1, _ => {$('spinner').remove()});
-    }
+        }, -1000, 0, 10);
+        _cancelSpinner = true;
+        if ($('spinner')) {
+            sigmoidAnimate(x => {
+                $('spinner').style.opacity = x;
+                return false;
+            }, 1, 0, 1, _ => {$('spinner').remove()});
+        }
+    }, 2500);
 });
 window.addEventListener('load', initializeState, false);
 window.addEventListener('load', _ => {
