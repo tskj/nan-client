@@ -236,7 +236,7 @@ body {
     height: 10vw;
     margin: 0 auto;
     margin-left: calc(50% - 5vw);
-    margin-top: -250px;
+    margin-top: -220px;
     background-image: url(img/spinner.gif);
     background-repeat: no-repeat;
     background-size: 100% 100%;
