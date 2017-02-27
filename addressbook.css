@@ -328,31 +328,39 @@ body {
 }
 
 @media only screen and (max-device-width: 480px) {
+
     body {
-        width: 100%;
-        height: 100%;
         position: relative;
-        background-color: black;
+        width: 100%;
     }
 
-    .inputform #submit_button {
-        width: 90%;
-        height: 80px;
-        line-height: 80px;
-        margin-top: 105%;
-        margin-bottom: 5%;
+    #bar {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 89px;
+        margin: 0 auto;
+        padding: 0;
+        height: 3px;
     }
 
     .menu ul {
+        background-color: #fefefe;
         padding: 40;
         height: 3%;
     }
 
     .menu li {
         height: 3%;
+        position: relative;
     }
 
     .menu div {
         font-size: 30px;
+    }
+
+    #spinner {
+        width: 30vw;
+        height: 30vw;
     }
 }
