@@ -554,7 +554,7 @@ function handleResponse(req, reqVerb, _id) {
                 displayMessage(formatBold('OK') + _id + ' blei oppdatert', 'green', true);
             } else if (req.status === 201 && reqVerb === 'POST') {
                 displayMessage(formatBold('OK') + req.responseText + ' rader lagt til', 'green', true);
-            } else if (req.status === 405 && reqVerb === 'POST') {
+            } else if (req.status === 405 && (reqVerb === 'POST' || reqVerb == 'PUT')) {
                 displayMessage(formatBold('Not Allowed') + 'Ei eller fleire rader finnast frå før<br>Ingen rader oppdatert', 'orange', false);
             } else {
                 if (req.status === 0) {
