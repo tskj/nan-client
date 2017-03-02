@@ -334,29 +334,31 @@ body {
         width: 100%;
     }
 
-    #bar {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 89px;
-        margin: 0 auto;
-        padding: 0;
-        height: 3px;
-    }
-
     .menu ul {
         background-color: #fefefe;
+        position: relative;
         padding: 40;
-        height: 3%;
     }
 
     .menu li {
-        height: 3%;
         position: relative;
     }
 
     .menu div {
+        position: relative;
+        line-height: 40px;
         font-size: 30px;
+    }
+
+    #bar {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: 0;
+        margin-top: 70px;
+        padding: 0;
+        height: 5px;
+        width: 100%;
     }
 
     #spinner {
