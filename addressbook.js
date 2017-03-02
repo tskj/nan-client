@@ -600,7 +600,6 @@ function initializeState() {
 }
 
 createSpinnerOn(document.getElementsByTagName('body')[0], '25%');
-$('app').firstElementChild.remove();
 window.addEventListener('load', _ =>  {
     setTimeout( _ => {
         expDecayAnimate(x => {
