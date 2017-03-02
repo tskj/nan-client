@@ -334,20 +334,33 @@ body {
         width: 100%;
     }
 
+    .menu {
+        box-shadow: 1px 1px 2px 1px #cccccc;
+        user-select: none;
+        position: relative;
+        z-index: 10;
+    }
+
     .menu ul {
         background-color: #fefefe;
         position: relative;
-        padding: 40;
+        padding: 50;
     }
 
     .menu li {
+        background-color: #fefefe;
         position: relative;
     }
-
+    
     .menu div {
+        background-color: #fefefe;
         position: relative;
-        line-height: 40px;
+        line-height: 45px;
         font-size: 30px;
+    }
+    
+    .menu div:active {
+        background-color: #f8f8f8;
     }
 
     #bar {
@@ -355,7 +368,7 @@ body {
         left: 0;
         right: 0;
         margin: 0;
-        margin-top: 70px;
+        margin-top: 85px;
         padding: 0;
         height: 5px;
         width: 100%;
