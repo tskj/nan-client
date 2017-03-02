@@ -33,7 +33,7 @@ function setState(state) {
 
     $(state).style.backgroundColor = selectedColor;
 
-    panes.forEach( element => {
+    panes.forEach( function(element) {
         if (element === state) {
             return;
         }
@@ -57,7 +57,7 @@ function setSearchState() {
     $('ID_selector').className = 'active';
     $('ID_selector').disabled = false;
 
-    inputFields.forEach( form => {
+    inputFields.forEach( function(form) {
         enableForm(form, false);
     });
 }
@@ -67,7 +67,7 @@ function setPostState() {
     $('ID_selector').className = 'inactive';
     $('ID_selector').disabled = true;
 
-    inputFields.forEach( form => {
+    inputFields.forEach( function(form) {
         enableForm(form, true);
     });
 }
@@ -80,7 +80,7 @@ function setPutState() {
     var firstForm = inputFields[0];
     enableForm(firstForm, true);
 
-    inputFields.forEach( form => {
+    inputFields.forEach( function(form) {
         if (form !== firstForm) {
             enableForm(form, false);
         }
@@ -88,7 +88,7 @@ function setPutState() {
 }
 
 function enableForm(form, enabled) {
-    form.forEach( field => {
+    form.forEach( function(field) {
         field.children[0].disabled = !enabled;
     });
 }
@@ -100,7 +100,7 @@ function addFormFields(event) {
     }
 
     var newForm = [];
-    inputFields[0].forEach( n => {
+    inputFields[0].forEach( function(n) {
         newForm.push(n.cloneNode(true));
     });
 
@@ -114,7 +114,7 @@ function addFormFields(event) {
     p = newInsertion;
 
     // add cloned elements to DOM
-    newForm.forEach( inputField => {
+    newForm.forEach( function(inputField) {
         inputField.children[0].value = '';
         addAfter(p, inputField);
         p = inputField;
@@ -130,7 +130,7 @@ function insertAfter(newNode, referenceNode) {
 function linearAnimate(f, cp, fp, s, finalize) {
 
     s = (typeof s !== 'undefined') ? s : 1000;
-    finalize = (typeof finalize !== 'undefined') ? finalize : _ => {return;};
+    finalize = (typeof finalize !== 'undefined') ? finalize : function() {return;};
 
     const fps = 100;
     const ms = Math.pow(10, 3);
@@ -148,13 +148,13 @@ function linearAnimate(f, cp, fp, s, finalize) {
         return;
     }
 
-    setTimeout(_ => {
+    setTimeout(function() {
         linearAnimate(f, cp, fp, s, finalize);
     }, ms / fps);
 }
 
 function sigmoidAnimate(f, cp, fp, s, finalize) {
-    linearAnimate( x => {
+    linearAnimate( function(x) {
         return f(Math.max(fp, cp) + (fp - cp) / (1 + Math.exp(-10 * (x - 0.5))));
     }, 0, 1, s, finalize);
 }
@@ -162,7 +162,7 @@ function sigmoidAnimate(f, cp, fp, s, finalize) {
 function expDecayAnimate(f, cp, fp, s, finalize) {
 
     s = (typeof s !== 'undefined') ? s : 10;
-    finalize = (typeof finalize !== 'undefined') ? finalize : _ => {return;};
+    finalize = (typeof finalize !== 'undefined') ? finalize : function() {return;};
 
     const d = fp - cp;
 
@@ -182,7 +182,7 @@ function expDecayAnimate(f, cp, fp, s, finalize) {
         return;
     }
 
-    setTimeout(_ => {
+    setTimeout(function() {
         expDecayAnimate(f, cp, fp, s, finalize);
     }, ms / fps);
 }
@@ -221,7 +221,7 @@ function bringStatusIntoView(status) {
         return smallestx;
     };
 
-    var target = targets[intArgMin(x => Math.abs(pos - targets[x]), 0, 1)];
+    var target = targets[intArgMin( function(x) {Math.abs(pos - targets[x])}, 0, 1)];
 
     var distToScroll = pos - target;
 
@@ -277,7 +277,7 @@ function interruptibleScrollTo(y) {
 
 function interruptibleStatusFadeOut(f, status) {
     
-    return o => {
+    return function(o) {
         if (nrOfStatusAbortions[status] < 2) {
             if (_fadeOutWasAborted) {
                 $(status).style.opacity = 1;
@@ -294,9 +294,9 @@ function interruptibleStatusFadeOut(f, status) {
                     currentMargin = 50;
                     var statusMarginTop = parseFloat(window.getComputedStyle($(status)).getPropertyValue('margin-top').substring(0, 2));
                     var statusMarginBottom = parseFloat(window.getComputedStyle($(status)).getPropertyValue('margin-bottom').substring(0, 2));
-                    sigmoidAnimate(x => {
+                    sigmoidAnimate( function(x) {
                         $(status).nextElementSibling.style.marginTop = x;
-                    }, currentMargin, currentMargin - ($(status).clientHeight + statusMarginTop + statusMarginBottom) - 2, 1, _ => {
+                    }, currentMargin, currentMargin - ($(status).clientHeight + statusMarginTop + statusMarginBottom) - 2, 1, function() {
                         $(status).nextElementSibling.style.marginTop = currentMargin;
                         $(status).remove();
                         nrOfStatuses--;
@@ -326,27 +326,29 @@ function displayMessage(str, color, permanent) {
     nrOfStatusAbortions[status] = 0;
 
     insertAfter(createStatusMessage(str, color), $('app').firstElementChild);
-    expDecayAnimate(x => {$(status).style.opacity = x; return false;}, 0.0, 1.0, 4);
-    expDecayAnimate(x => {$(status).style.filter = 'blur(' + x + 'px)'; return false;}, 10.0, 0.0, 8);
-    var startFadeOutTimer = time => setTimeout( _ => {
-        if (_fadeOutWasAborted) {
-            _fadeOutWasAborted = false;
-            startFadeOutTimer(time);
-            return;
-        }
+    expDecayAnimate(function(x) {$(status).style.opacity = x; return false;}, 0.0, 1.0, 4);
+    expDecayAnimate(function(x) {$(status).style.filter = 'blur(' + x + 'px)'; return false;}, 10.0, 0.0, 8);
+    var startFadeOutTimer = function(time) {
+        setTimeout( function() {
+            if (_fadeOutWasAborted) {
+                _fadeOutWasAborted = false;
+                startFadeOutTimer(time);
+                return;
+            }
 
-        sigmoidAnimate(interruptibleStatusFadeOut(startFadeOutTimer, status), 1.0, 0.0, 1, _ => {
-            setTimeout( _ => {
-                if ($(status)) {
-                    $(status).remove();
-                    nrOfStatuses--;
-                    nrOfStatusAbortions[status] = 0;
-                }
-            }, 3000);
-        });
-    }, time);
+            sigmoidAnimate(interruptibleStatusFadeOut(startFadeOutTimer, status), 1.0, 0.0, 1, function() {
+                setTimeout( function() {
+                    if ($(status)) {
+                        $(status).remove();
+                        nrOfStatuses--;
+                        nrOfStatusAbortions[status] = 0;
+                    }
+                }, 3000);
+            });
+        }, time);
+    }
     _fadeOutWasAborted = false;
-    $(status).addEventListener('mouseover', _ => _fadeOutWasAborted = true);
+    $(status).addEventListener('mouseover', function() {_fadeOutWasAborted = true});
     if (!permanent) {
         startFadeOutTimer(5000);
     }
@@ -365,7 +367,7 @@ function createSpinnerOn(e, _marginBottom) {
     spinner.id = 'spinner';
     spinner.style.marginBottom = _marginBottom;
     insertAfter(spinner, e);
-    sigmoidAnimate(x => {
+    sigmoidAnimate(function(x) {
         if (_cancelSpinner) {
             $('spinner').remove();
             return true;
@@ -388,7 +390,7 @@ function sendRequest() {
     }
 
     createSpinnerOn($('submit_button'));
-    expDecayAnimate(x => {
+    expDecayAnimate(function(x) {
         if (_cancelSpinner) {
             return true;
         }
@@ -399,7 +401,7 @@ function sendRequest() {
 
     var xml = document.implementation.createDocument(null, 'contacts');
 
-    inputFields.forEach( inputForm => {
+    inputFields.forEach( function(inputForm) {
 
         if (inputForm[0].children[0].disabled) {
             return;
@@ -444,18 +446,18 @@ function sendRequest() {
 }
 
 function handleResponse(req, reqVerb, _id) {
-    return _ => {
+    return function() {
         _cancelSpinner = true;
         if ($('submit_button').style.opacity < '0.9') {
-            expDecayAnimate(x => {$('submit_button').style.opacity = x; return false;}, 0, 1, 10);
-            sigmoidAnimate(x => {
+            expDecayAnimate(function(x) {$('submit_button').style.opacity = x; return false;}, 0, 1, 10);
+            sigmoidAnimate(function(x) {
                 if (!$('spinner')) {
                     return true;
                 }
                 $('spinner').style.opacity = x;
                 $('spinner').style.transform = 'scale(' + x + ')';
                 return false;
-            }, 1, 0, 2, _ => {
+            }, 1, 0, 2, function() {
                 $('spinner').remove();
             });
             $('submit_button').style.cursor = 'pointer';
@@ -531,12 +533,12 @@ function handleResponse(req, reqVerb, _id) {
                 insertAfter(results, $('app').firstElementChild);
                 $(resultsID).style.marginTop = -100;
                 $(resultsID).style.opacity = 0;
-                var fadeIn = _ => {
-                    expDecayAnimate(x => {
+                var fadeIn = function() {
+                    expDecayAnimate(function(x) {
                         $(resultsID).style.marginTop = x;
                         return false;
                     }, -$(resultsID).clientHeight, 50, 10);
-                    expDecayAnimate(x => {
+                    expDecayAnimate(function(x) {
                         $(resultsID).style.opacity = x;
                         return false;
                     }, 0, 1, 10);
@@ -579,8 +581,8 @@ function handleResponse(req, reqVerb, _id) {
 }
 
 function initializeState() {
-    panes.forEach( pane => {
-        $(pane).addEventListener('click', _ => setState(pane), false);
+    panes.forEach( function(pane) {
+        $(pane).addEventListener('click', function() {setState(pane)}, false);
     });
 
     var pane_selector = document.createElement('div');
@@ -600,30 +602,30 @@ function initializeState() {
 }
 
 createSpinnerOn(document.getElementsByTagName('body')[0], '25%');
-window.addEventListener('load', _ =>  {
-    setTimeout( _ => {
-        expDecayAnimate(x => {
+window.addEventListener('load', function()  {
+    setTimeout( function() {
+        expDecayAnimate(function(x) {
             $('app').style.marginTop = x;
             return false;
         }, -1000, 0, 10);
         _cancelSpinner = true;
         if ($('spinner')) {
-            sigmoidAnimate(x => {
+            sigmoidAnimate(function(x) {
                 $('spinner').style.opacity = x;
                 return false;
-            }, 1, 0, 1, _ => {$('spinner').remove()});
+            }, 1, 0, 1, function() {$('spinner').remove()});
         }
     }, 2500);
 });
 window.addEventListener('load', initializeState, false);
-window.addEventListener('load', _ => {
+window.addEventListener('load', function() {
     $('submit_button').style.opacity = 1;
     $('submit_button').addEventListener('click', sendRequest, false);
 });
-window.addEventListener('load', _ => {
+window.addEventListener('load', function() {
     $('new_fields_button').addEventListener('click', addFormFields, false);
 });
-window.addEventListener('load', _ => {
+window.addEventListener('load', function() {
 
     var stopAnim = function() {
         _userScrolled = true;
