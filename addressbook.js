@@ -25,7 +25,7 @@ function setState(state) {
     if (panes.indexOf(state) < 0) {
         return;
     }
-    
+
     currState = state;
 
     const selectedColor = getComputedStyle(document.querySelector('.inputform')).backgroundColor;
@@ -201,7 +201,7 @@ function bringStatusIntoView(status) {
 
     targets[0] = Math.min(targets[0], pos + scrollDist);
     targets[1] = Math.max(targets[1], windowHeight - docHeight + pos + scrollDist);
-    
+
     var intArgMin = function(f, a, b) {
 
         if (b < a) {
@@ -264,7 +264,7 @@ function createStatusMessage(message, color) {
 }
 
 function interruptibleScrollTo(y) {
-    
+
     if (_userScrolled) {
         _userScrolled = false;
         return true;
@@ -276,7 +276,7 @@ function interruptibleScrollTo(y) {
 }
 
 function interruptibleStatusFadeOut(f, status) {
-    
+
     return function(o) {
         if (nrOfStatusAbortions[status] < 2) {
             if (_fadeOutWasAborted) {
@@ -582,7 +582,61 @@ function handleResponse(req, reqVerb, _id) {
 
 function initializeState() {
     panes.forEach( function(pane) {
-        $(pane).addEventListener('click', function() {setState(pane)}, false);
+        $(pane).addEventListener('mousedown', function(e) {
+            var overlay = document.createElement('div');
+            overlay.id = 'overlayanimation';
+            overlay.style.position = 'absolute';
+            overlay.style.backgroundColor = '#f5f5f5';
+            overlay.style.width = '100%';
+            overlay.style.height = window.getComputedStyle(e.target.parentNode, null).getPropertyValue('height');
+            overlay.style.padding = 0;
+            overlay.style.left = 0;
+            overlay.style.bottom = 0;
+            overlay.style.zIndex = -1;
+            e.target.appendChild(overlay);
+
+            _hasClickedPane = false;
+            linearAnimate(function(x) {
+                overlay.style.borderRadius = 10 + (1-x) * 100 + 'px';
+                overlay.style.transform = 'scale(' + 1.2 * x + ')';
+                return _hasClickedPane;
+            }, 0, 1, 10);
+        });
+        $(pane).addEventListener('click', function() {
+            setState(pane);
+            _hasClickedPane = true;
+            linearAnimate(function(x) {
+                x = 1 - x;
+                var overlay = $('overlayanimation');
+                if (!overlay) {
+                    return true;
+                }
+                overlay.style.borderRadius = 10 + (1-x) * 100 + 'px';
+                overlay.style.transform = 'scale(' + 1.2 * x + ')';
+                return false;
+            }, 0, 1, 10, function() {
+                var overlay = $('overlayanimation');
+                if (overlay) {
+                    overlay.remove();
+                }
+            });
+        }, false);
+        $(pane).addEventListener('mouseover', function() {
+            var p = $(pane);
+            if (pane !== currState) {
+                p.style.backgroundColor = '#f0f0f0';
+            }
+        });
+        $(pane).addEventListener('mouseleave', function() {
+            var p = $(pane);
+            if (pane !== currState) {
+                p.style.backgroundColor = '#f5f5f5';
+            }
+            var overlay = $('overlayanimation');
+            if (overlay) {
+                overlay.remove();
+            }
+        });
     });
 
     var pane_selector = document.createElement('div');

@@ -39,10 +39,8 @@ body {
     width: 25%;
     height: 40px;
     cursor: pointer;
-}
-
-.menu li:hover {
-    background-color: #fafafa !important;
+    overflow: hidden;
+    z-index: 0;
 }
 
 .menu div {
@@ -52,10 +50,7 @@ body {
     font-weight: bold;
     font-size: 15px;
     padding: 13px;
-}
-
-.menu div:active {
-    color: #fafafa;
+    z-index: 10;
 }
 
 #bar {
@@ -64,6 +59,7 @@ body {
     width: 100%;
     padding-top: 0px;
     padding-bottom: 5px;
+    z-index: -2;
 }
 
 .inputform {
@@ -351,14 +347,14 @@ body {
         background-color: #fefefe;
         position: relative;
     }
-    
+
     .menu div {
         background-color: #fefefe;
         position: relative;
         line-height: 45px;
         font-size: 30px;
     }
-    
+
     .menu div:active {
         background-color: #f8f8f8;
     }
