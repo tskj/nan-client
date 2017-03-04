@@ -582,7 +582,7 @@ function handleResponse(req, reqVerb, _id) {
 
 function initializeState() {
     panes.forEach( function(pane) {
-        $(pane).addEventListener('mousedown', function(e) {
+        var clickAnimation = function(e) {
             var overlay = document.createElement('div');
             overlay.id = 'overlayanimation';
             overlay.style.position = 'absolute';
@@ -601,7 +601,9 @@ function initializeState() {
                 overlay.style.transform = 'scale(' + 1.2 * x + ')';
                 return _hasClickedPane;
             }, 0, 1, 10);
-        });
+        };
+        $(pane).addEventListener('mousedown', clickAnimation);
+        $(pane).addEventListener('touchstart', clickAnimation);
         $(pane).addEventListener('click', function() {
             setState(pane);
             _hasClickedPane = true;
@@ -627,7 +629,7 @@ function initializeState() {
                 p.style.backgroundColor = '#f0f0f0';
             }
         });
-        $(pane).addEventListener('mouseleave', function() {
+        var endAnimation = function() {
             var p = $(pane);
             if (pane !== currState) {
                 p.style.backgroundColor = '#f5f5f5';
@@ -636,7 +638,9 @@ function initializeState() {
             if (overlay) {
                 overlay.remove();
             }
-        });
+        };
+        $(pane).addEventListener('mouseleave', endAnimation);
+        $(pane).addEventListener('touchend', endAnimation);
     });
 
     var pane_selector = document.createElement('div');

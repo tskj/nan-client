@@ -331,21 +331,43 @@ body {
     }
 
     .menu {
-        box-shadow: 1px 1px 2px 1px #cccccc;
+        box-shadow: 1px 1px 3px 1px #eeeeee;
         user-select: none;
         position: relative;
         z-index: 10;
+
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+        -webkit-touch-callout:none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
     }
 
     .menu ul {
         background-color: #fefefe;
         position: relative;
         padding: 50;
+
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+        -webkit-touch-callout:none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
     }
 
     .menu li {
         background-color: #fefefe;
         position: relative;
+        height: 140px;
+
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+        -webkit-touch-callout:none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
     }
 
     .menu div {
@@ -353,6 +375,14 @@ body {
         position: relative;
         line-height: 45px;
         font-size: 30px;
+        padding-bottom: 100px;
+
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+        -webkit-touch-callout:none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
     }
 
     .menu div:active {
@@ -368,6 +398,14 @@ body {
         padding: 0;
         height: 5px;
         width: 100%;
+        z-index: 11;
+
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+        -webkit-touch-callout:none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
     }
 
     #spinner {
