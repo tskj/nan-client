@@ -602,6 +602,7 @@ function initializeState() {
 }
 
 createSpinnerOn(document.getElementsByTagName('body')[0], '25%');
+window.addEventListener('load', initializeState, false);
 window.addEventListener('load', function()  {
     setTimeout( function() {
         expDecayAnimate(function(x) {
@@ -616,16 +617,11 @@ window.addEventListener('load', function()  {
             }, 1, 0, 1, function() {$('spinner').remove()});
         }
     }, 2500);
-});
-window.addEventListener('load', initializeState, false);
-window.addEventListener('load', function() {
+
     $('submit_button').style.opacity = 1;
     $('submit_button').addEventListener('click', sendRequest, false);
-});
-window.addEventListener('load', function() {
+
     $('new_fields_button').addEventListener('click', addFormFields, false);
-});
-window.addEventListener('load', function() {
 
     var stopAnim = function() {
         _userScrolled = true;
