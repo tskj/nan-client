@@ -8,7 +8,8 @@ body {
     background-color: #f0f0f0;
     font-family: sans-serif;
     margin: 0 auto;
-    width: 52%;
+    width: 75%;
+    max-width: 1000px;
 }
 
 .dropshadow {
@@ -325,6 +326,15 @@ body {
 
 @media only screen and (max-device-width: 480px) {
 
+    #bar, .menu, .menu ul, .menu li, .menu div, #new_fields_button, #submit_button {
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+        -webkit-touch-callout:none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
     body {
         position: relative;
         width: 100%;
@@ -335,13 +345,6 @@ body {
         user-select: none;
         position: relative;
         z-index: 10;
-
-        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-        -webkit-touch-callout:none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
     }
 
     .menu ul {
@@ -351,26 +354,12 @@ body {
         padding: 50;
         padding-top: 20;
         padding-bottom: 70;
-
-        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-        -webkit-touch-callout:none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
     }
 
     .menu li {
         background-color: #fefefe;
         position: relative;
         height: 140px;
-
-        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-        -webkit-touch-callout:none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
     }
 
     .menu div {
@@ -380,13 +369,6 @@ body {
         font-size: 30px;
         padding-top: 40px;
         padding-bottom: 100px;
-
-        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-        -webkit-touch-callout:none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
     }
 
     .menu div:active {
@@ -404,12 +386,6 @@ body {
         width: 100%;
         z-index: 11;
 
-        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-        -webkit-touch-callout:none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
     }
 
     #spinner {
@@ -421,6 +397,10 @@ body {
         font-size: 40px;
     }
 
+    h1 + p.inputfield {
+        font-size: 40px;
+    }
+
     .inputfield {
         position: relative;
         font-size: 30px;
@@ -429,12 +409,19 @@ body {
 
     #ID_selector {
         position: absolute;
-        top: 20;
+        top: 30;
         right: 0;
         width: 100%;
-        font-size: 25px;
-        padding-bottom: 30px;
+        font-size: 35px;
+        color: #444444;
+        padding-bottom: 35px;
         padding-right: 10px;
+        border-bottom-width: 3;
+        z-index: 5;
+    }
+
+    #ID_selector:hover {
+        border-bottom-width: 3;
     }
 
     .inputform > div {
@@ -442,5 +429,67 @@ body {
         color: #777777;
         width: 75%;
         margin: 70 auto;
+    }
+
+    .inputfield {
+        position: relative;
+        margin-top: 50px;
+    }
+
+    p.inputfield {
+        line-height: 60px;
+        padding-left: 20px;
+    }
+
+    div.inputfield {
+        width: 75%;
+        margin-bottom: 200px;
+    }
+
+    .inputfield > input {
+        position: absolute;
+        float: none;
+        right: 0;
+        top: 0;
+        height: 60px;
+        width: 80%;
+        font-size: 25px;
+        text-align: right;
+    }
+
+    #new_fields_button {
+        margin-top: 30px;
+        width: 140px;
+        height: 40px;
+        text-align: center;
+        font-size: 20px;
+        line-height: 15px;
+        padding-top: 25px;
+    }
+
+    .inputform #submit_button {
+        width: 75%;
+        height: 70px;
+        line-height: 70px;
+    }
+
+    .inputform #submit_button:active {
+        width: 75%;
+        height: 70px;
+        line-height: 70px;
+    }
+    
+    .WarningResponse {
+        border-radius: 70px;
+        height: 270px;
+    }
+
+    .WarningResponse > div {
+        font-weight: thin;
+        font-size: 40px;
+        margin-top: 45px;
+        margin-left: 65px;
+        line-height: 140%;
+        -webkit-font-smoothing: antialiased;
     }
 }
