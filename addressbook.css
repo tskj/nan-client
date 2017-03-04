@@ -416,4 +416,31 @@ body {
         width: 30vw;
         height: 30vw;
     }
+
+    .inputform h1 {
+        font-size: 40px;
+    }
+
+    .inputfield {
+        position: relative;
+        font-size: 30px;
+        width: 75%;
+    }
+
+    #ID_selector {
+        position: absolute;
+        top: 20;
+        right: 0;
+        width: 100%;
+        font-size: 25px;
+        padding-bottom: 30px;
+        padding-right: 10px;
+    }
+
+    .inputform > div {
+        font-size: 30px;
+        color: #777777;
+        width: 75%;
+        margin: 70 auto;
+    }
 }
