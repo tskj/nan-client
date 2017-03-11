@@ -476,22 +476,22 @@ body {
     }
 
     .inputform #submit_button:active {
-        width: 75%;
-        height: 70px;
-        line-height: 70px;
+        line-height: 80px;
     }
 
     .WarningResponse {
-        border-radius: 70px;
+        border-radius: 50px;
         height: 330px;
+        width: 100%;
+        margin: 80 auto;
     }
 
     .WarningResponse > div {
         font-weight: thin;
         font-size: 40px;
-        margin-top: 45px;
+        margin-top: 75px;
         margin-left: 65px;
-        line-height: 140%;
+        line-height: 110%;
         -webkit-font-smoothing: antialiased;
     }
 
