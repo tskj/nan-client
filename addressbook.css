@@ -493,4 +493,22 @@ body {
         line-height: 140%;
         -webkit-font-smoothing: antialiased;
     }
+
+    .results ul {
+        height: 100px;
+        line-height: 50px;
+    }
+
+    .results .th {
+        height: 120px;
+    }
+
+    .results li {
+        height: 80px;
+    }
+
+    .results div {
+        font-size: 20px;
+        padding: 15px;
+    }
 }
