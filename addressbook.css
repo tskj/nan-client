@@ -343,7 +343,8 @@ body {
     .menu {
         box-shadow: 1px 1px 15px 5px #eaeaea;
         user-select: none;
-        position: relative;
+        position: fixed;
+        width: 100%;
         z-index: 10;
     }
 
