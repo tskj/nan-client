@@ -495,7 +495,7 @@ body {
     }
 
     .results ul {
-        height: 100px;
+        height: 120px;
         line-height: 50px;
     }
 
@@ -504,11 +504,11 @@ body {
     }
 
     .results li {
-        height: 80px;
+        height: 120px;
     }
 
     .results div {
-        font-size: 20px;
-        padding: 15px;
+        font-size: 40px;
+        padding: 20px;
     }
 }
