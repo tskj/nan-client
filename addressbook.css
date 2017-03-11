@@ -460,18 +460,19 @@ body {
 
     #new_fields_button {
         margin-top: 30px;
-        width: 140px;
-        height: 40px;
+        width: 160px;
+        height: 70px;
         text-align: center;
-        font-size: 20px;
-        line-height: 15px;
-        padding-top: 25px;
+        font-size: 25px;
+        line-height: 70px;
+        border-radius: 10px;
     }
 
     .inputform #submit_button {
         width: 75%;
-        height: 70px;
-        line-height: 70px;
+        height: 80px;
+        line-height: 80px;
+        font-size: 40px;
     }
 
     .inputform #submit_button:active {
